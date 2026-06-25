@@ -74,7 +74,7 @@ export default function TopFreelancersSection() {
 
   return (
     <section className="w-full bg-[#F4EFEA] py-24 lg:py-32 font-sans overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Centered Section Header */}
         <div className="flex flex-col items-center justify-center text-center mb-16 lg:mb-20 space-y-5">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1C1E1B] tracking-tight">
