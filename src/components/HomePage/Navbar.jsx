@@ -93,14 +93,14 @@ export default function Navbar() {
             {!user ? (
               <>
                 <Link
-                  href="/login"
+                  href="/auth/signin"
                   className="text-sm font-medium text-[#5A5E5A] hover:text-[#1C1E1B] transition-colors"
                 >
                   Login
                 </Link>
                 {/* Rounded XL CTA with Arrow Element matching reference */}
                 <Link
-                  href="/sign-up"
+                  href="/auth/signup"
                   className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#1C1E1B] text-[#F4EFEA] hover:bg-[#4E654C] text-sm font-medium rounded-full transition-all duration-200"
                 >
                   <span>Get Started</span>
@@ -207,14 +207,14 @@ export default function Navbar() {
             {!user ? (
               <>
                 <Link
-                  href="/login"
+                  href="/auth/signin"
                   onClick={() => setIsOpen(false)}
                   className="text-sm font-medium text-center text-[#5A5E5A] py-2"
                 >
                   Login
                 </Link>
                 <Link
-                  href="/sign-up"
+                  href="/auth/signup"
                   onClick={() => setIsOpen(false)}
                   className="inline-flex items-center justify-between pl-5 pr-2 py-2 bg-[#1C1E1B] text-[#F4EFEA] text-sm font-semibold rounded-xl"
                 >
