@@ -49,7 +49,7 @@ export default function Navbar() {
               Browse Tasks
             </Link>
             <Link
-              href="/freelancers"
+              href="/browseFreelancers"
               className={`text-sm font-medium transition-colors ${
                 isActive("/freelancers")
                   ? "text-[#4E654C]"
@@ -202,7 +202,7 @@ export default function Navbar() {
             Browse Tasks
           </Link>
           <Link
-            href="/freelancers"
+            href="/browseFreelancers"
             onClick={() => setIsOpen(false)}
             className="block text-sm font-medium text-[#5A5E5A] py-1"
           >

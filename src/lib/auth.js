@@ -25,6 +25,14 @@ export const auth = betterAuth({
         type: "string",
         required: false,
       },
+      rate: {
+        type: "int",
+        required: false,
+      },
+      skills: {
+        type: "array",
+        required: false,
+      },
       // Note: If you plan to pass arrays, MongoDB handles it well,
       // but ensure your Better Auth client is configured to accept it.
     },

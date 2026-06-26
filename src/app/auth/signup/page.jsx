@@ -15,7 +15,7 @@ import {
   Plus,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { toast } from "@heroui/react";
+import { Input, toast } from "@heroui/react";
 
 // Sample skillset bank for matching suggestions
 const SUGGESTED_SKILLS = [
@@ -96,7 +96,7 @@ export default function SignUpPage() {
       setIsLoading(false);
       return;
     }
-
+    console.log(skills);
     try {
       // Connects cleanly with your authClient backend configuration
       const { data, error } = await authClient.signUp.email({
@@ -105,10 +105,11 @@ export default function SignUpPage() {
         name: user.name,
         image: user.photoUrl,
         // Append extra payload if they choose freelancer
-        accountType: user.role, 
+        accountType: user.role,
         ...(user.role === "freelancer" && {
           skills: skills,
           bio: user.bio,
+          rate: user.rate,
         }),
       });
 
@@ -127,6 +128,8 @@ export default function SignUpPage() {
       setIsLoading(false);
     }
   };
+
+  console.log(skills);
 
   return (
     <main className="w-full min-h-screen relative flex items-center justify-center p-4 font-sans py-12">
@@ -266,6 +269,20 @@ export default function SignUpPage() {
                     rows={3}
                     placeholder="Tell clients about your expertise, background, and specialities..."
                     className="w-full bg-[#1C1E1B] text-[#F4EFEA] placeholder-zinc-600 rounded-xl p-3 border border-zinc-700 focus:border-[#4E654C] focus:outline-none text-sm resize-none"
+                  />
+                </div>
+
+                <div className="space-y-5 pt-4 border-t border-zinc-700/60 animate-in fade-in slide-in-from-top-3 duration-300">
+                  <label className="text-xs font-semibold text-zinc-400 uppercase tracking-wider">
+                    Rate (hourly)
+                  </label>
+                  <Input
+                    className="w-full bg-[#1C1E1B] text-[#F4EFEA] placeholder-zinc-600 rounded-xl p-3 border border-zinc-700 focus:border-[#4E654C] focus:outline-none text-sm resize-none"
+                    name="rate"
+                    id="input-type-number"
+                    min={0}
+                    placeholder="30"
+                    type="number"
                   />
                 </div>
 
