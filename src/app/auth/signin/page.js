@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -15,14 +16,14 @@ export default function SignInPage() {
 
   // STRICT REQUIREMENT CHECK: Role-based destination routing
   const handleRouteRedirect = (role) => {
-    if (role === "Freelancer" || role === "Admin") {
+    if (role === "freelancer" || role === "admin") {
       router.push("/dashboard");
     } else {
       router.push("/"); // Clients go to standard Home path routing
     }
   };
 
-  const handleFormSubmit = (e) => {
+  const handleFormSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
@@ -33,10 +34,15 @@ export default function SignInPage() {
 
     // TODO: Connect Better Auth query handler here:
     // const response = await auth.signIn.email({ email, password });
+    const { data, error } = await authClient.signIn.email({
+        email: email,
+        password: password,
+        rememberMe: true,
+      });
     // handleRouteRedirect(response.user.role);
 
     // Placeholder mockup assuming verified Client login success
-    handleRouteRedirect("Client");
+    handleRouteRedirect("client");
   };
 
   const handleGoogleSignIn = () => {

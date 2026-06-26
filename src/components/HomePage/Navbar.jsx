@@ -4,18 +4,25 @@ import React, { useState } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { ArrowRight } from "@gravity-ui/icons";
+import { authClient } from "@/lib/auth-client";
+import { Avatar, Button } from "@heroui/react";
 
 export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   // MOCK AUTH STATE: Change to preview true/false for authenticated routes
-  const user = null;
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  console.log(user);
+  const handleSignOut = async () => {
+    await authClient.signOut();
+  };
 
   const isActive = (path) => pathname === path;
 
   return (
-    <header className="w-full bg-[#F4EFEA] border-b border-[#E6DDD4] sticky top-0 z-50">
+    <header className="w-full bg-[#F4EFEA] border-b border-[#E6DDD4]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* 3-Column Grid Container matching the image structure */}
         <div className="grid grid-cols-2 md:grid-cols-3 items-center h-20">
@@ -87,6 +94,25 @@ export default function Navbar() {
                 >
                   Profile
                 </Link>
+                <Button className="bg-transparent min-w-0 w-auto h-auto p-0 px-2 rounded-full cursor-pointer transition-transform outline-hidden">
+                  <Avatar
+                    className="border-2 border-[#4E654C] bg-[#1E1611] text-[#F7F4EF]"
+                    size="md"
+                  >
+                    <Avatar.Image
+                      referrerPolicy="no-referrer"
+                      alt={user?.name?.charAt(0)}
+                      src={user?.image}
+                    />
+                    <Avatar.Fallback className="bg-[#1E1611] text-[#F7F4EF] font-bold">
+                      {user?.name?.charAt(0)}
+                    </Avatar.Fallback>
+                  </Avatar>
+                  <div className="text-left text-[#4E654C]">
+                    <h4>{user?.email}</h4>
+                    <p>{user?.accountType}</p>
+                  </div>
+                </Button>
               </>
             )}
 
@@ -104,12 +130,12 @@ export default function Navbar() {
                   className="inline-flex items-center space-x-2 px-5 py-2.5 bg-[#1C1E1B] text-[#F4EFEA] hover:bg-[#4E654C] text-sm font-medium rounded-full transition-all duration-200"
                 >
                   <span>Get Started</span>
-                <ArrowRight/>
+                  <ArrowRight />
                 </Link>
               </>
             ) : (
               <button
-                onClick={() => console.log("Logging out...")}
+                onClick={handleSignOut}
                 className="inline-flex items-center space-x-2 px-5 py-2.5 border border-[#1C1E1B] text-[#1C1E1B] hover:bg-[#1C1E1B] hover:text-[#F4EFEA] text-sm font-medium rounded-xl transition-all duration-200"
               >
                 <span>Logout</span>
@@ -220,16 +246,13 @@ export default function Navbar() {
                 >
                   <span>Get Started</span>
                   <div className="w-8 h-8 rounded-full bg-[#F4EFEA] flex items-center justify-center">
-                    <ArrowRight/>
+                    <ArrowRight />
                   </div>
                 </Link>
               </>
             ) : (
               <button
-                onClick={() => {
-                  setIsOpen(false);
-                  console.log("Logging out...");
-                }}
+                onClick={handleSignOut}
                 className="w-full text-center px-5 py-2.5 border border-[#1C1E1B] text-[#1C1E1B] text-sm font-medium rounded-xl"
               >
                 Logout
