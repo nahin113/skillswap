@@ -85,7 +85,7 @@ export default function Navbar() {
                   Dashboard
                 </Link>
                 <Link
-                  href="/profile"
+                  href="/myProfile"
                   className={`text-sm font-medium transition-colors ${
                     isActive("/profile")
                       ? "text-[#4E654C]"
@@ -220,7 +220,7 @@ export default function Navbar() {
                 Dashboard
               </Link>
               <Link
-                href="/profile"
+                href="/myProfile"
                 onClick={() => setIsOpen(false)}
                 className="block text-sm font-medium text-[#5A5E5A] py-1"
               >
