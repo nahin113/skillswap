@@ -13,12 +13,18 @@ export const auth = betterAuth({
   emailAndPassword: {
     enabled: true,
   },
+  socialProviders: {
+    google: {
+      clientId: process.env.GOOGLE_CLIENTID,
+      clientSecret: process.env.GOOGLE_SECRET,
+    },
+  },
   user: {
     additionalFields: {
       accountType: {
         // <-- Use a custom field name to avoid conflicts
         type: "string", // <-- Required by Better Auth
-        required: true,
+        required: false,
         default: "client",
       },
       bio: {
@@ -35,6 +41,21 @@ export const auth = betterAuth({
       },
       // Note: If you plan to pass arrays, MongoDB handles it well,
       // but ensure your Better Auth client is configured to accept it.
+    },
+  },
+  databaseHooks: {
+    user: {
+      create: {
+        before: async (user) => {
+          return {
+            data: {
+              ...user,
+              // If accountType is missing or blank (like on Google Sign-In), force it to default to "client"
+              accountType: user.accountType || "client",
+            },
+          };
+        },
+      },
     },
   },
   plugins: [admin()],
