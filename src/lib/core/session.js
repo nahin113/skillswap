@@ -8,6 +8,8 @@ export const getUserSession = async () => {
     headers: await headers(),
   });
 
+  // if(session?.user?.banned) return null
+
   return session?.user || null;
 };
 
@@ -21,7 +23,7 @@ export const getUserToken = async () => {
 
 export const requireRole = async (role) => {
   const user = await getUserSession();
-  if (!user) redirect("/auth/sign-in");
-  if (user?.role !== role) redirect("/unauthorized");
+  if (!user) redirect("/auth/signin");
+  if (user?.accountType !== role) redirect("/unauthorized");
   return user;
 };

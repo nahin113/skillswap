@@ -4,6 +4,7 @@ import React from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ShieldAlert, ArrowLeft, Lock } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 export default function UnauthorizedPage() {
   return (
@@ -38,13 +39,6 @@ export default function UnauthorizedPage() {
           </p>
 
           <div className="flex flex-col gap-3 pt-2">
-            <Link
-              href="/auth/signin"
-              className="w-full bg-[#F4EFEA] text-[#1C1E1B] hover:bg-[#E6DDD4] font-bold py-3 px-4 rounded-xl text-sm transition-colors duration-200"
-            >
-              Sign In to Your Account
-            </Link>
-
             <Link
               href="/"
               className="w-full border-2 border-zinc-600 text-[#F4EFEA] hover:bg-zinc-800 font-bold py-3 px-4 rounded-xl text-sm transition-all duration-200 flex items-center justify-center space-x-2"

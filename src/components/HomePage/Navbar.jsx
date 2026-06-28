@@ -15,6 +15,7 @@ export default function Navbar() {
   const { data: session } = authClient.useSession();
   const user = session?.user;
   console.log(user);
+  const role = user?.accountType
   const handleSignOut = async () => {
     await authClient.signOut();
   };
@@ -75,9 +76,9 @@ export default function Navbar() {
             {user && (
               <>
                 <Link
-                  href="/dashboard"
+                  href={`/dashboard/${role}`}
                   className={`text-sm font-medium transition-colors ${
-                    isActive("/dashboard")
+                    isActive(`/dashboard/${role}`)
                       ? "text-[#4E654C]"
                       : "text-[#5A5E5A] hover:text-[#1C1E1B]"
                   }`}
@@ -213,7 +214,7 @@ export default function Navbar() {
             <>
               <div className="h-[1px] bg-[#E6DDD4] my-2" />
               <Link
-                href="/dashboard"
+                href={`/dashboard/${role}`}
                 onClick={() => setIsOpen(false)}
                 className="block text-sm font-medium text-[#5A5E5A] py-1"
               >

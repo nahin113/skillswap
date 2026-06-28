@@ -32,12 +32,17 @@ export const auth = betterAuth({
         required: false,
       },
       rate: {
-        type: "int",
+        type: "number",
         required: false,
       },
       skills: {
         type: "array",
         required: false,
+      },
+      banned: {
+        type: "boolean",
+        required: false,
+        defaultValue: false,
       },
       // Note: If you plan to pass arrays, MongoDB handles it well,
       // but ensure your Better Auth client is configured to accept it.
@@ -52,11 +57,46 @@ export const auth = betterAuth({
               ...user,
               // If accountType is missing or blank (like on Google Sign-In), force it to default to "client"
               accountType: user.accountType || "client",
+              banned: false,
             },
           };
         },
       },
     },
   },
-  plugins: [admin()],
+  plugins: [
+    admin(),
+    {
+      id: "ban-enforcer",
+      hooks: {
+        session: {
+          create: {
+            before: async (session, context) => {
+              // Fetch user detail matching session target
+              const user = await db
+                .collection("users")
+                .findOne({ _id: session.userId });
+              if (user?.banned === true) {
+                throw new Error(
+                  "This account has been suspended by an administrator."
+                );
+              }
+              return { context };
+            },
+          },
+          find: {
+            before: async (session, context) => {
+              const user = await db
+                .collection("users")
+                .findOne({ _id: session.userId });
+              if (user?.banned === true) {
+                throw new Error("Session revoked: Account suspended.");
+              }
+              return { context };
+            },
+          },
+        },
+      },
+    },
+  ],
 });

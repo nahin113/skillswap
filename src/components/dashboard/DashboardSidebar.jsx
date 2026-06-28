@@ -4,7 +4,6 @@ import {
   Briefcase,
   Envelope,
   Gear,
-  House,
   Magnifier,
   Person,
   Bookmark,
@@ -20,43 +19,72 @@ export async function DashboardSidebar() {
   const user = await getUserSession();
 
   const freelancerNavLinks = [
-    { icon: House, href: "/dashboard/recruiter", label: "Home" },
-    { icon: Magnifier, href: "/dashboard/recruiter/jobs", label: "Jobs" },
-    { icon: Bell, href: "/dashboard/recruiter/jobs/new", label: "Post A Job" },
     {
-      icon: Briefcase,
-      href: "/dashboard/recruiter/company",
-      label: "Company Profile",
-    },
-    { icon: Envelope, href: "/messages", label: "Messages" },
-    { icon: Person, href: "/profile", label: "Profile" },
-    { icon: Gear, href: "/settings", label: "Settings" },
-  ];
-
-  const clientNavLinks = [
-    { icon: House, href: "/dashboard/seeker", label: "Dashboard" },
-    { icon: Magnifier, href: "/dashboard/seeker/jobs", label: "Jobs" },
-    {
-      icon: Bookmark,
-      href: "/dashboard/seeker/saved-jobs",
-      label: "Saved Jobs",
+      icon: Magnifier,
+      href: "/dashboard/freelancer/browseTasks",
+      label: "Browse Tasks View",
     },
     {
       icon: FileText,
-      href: "/dashboard/seeker/applications",
-      label: "Applications",
+      href: "/dashboard/freelancer/submitProposals",
+      label: "Submit a Proposal Form",
     },
-    { icon: CreditCard, href: "/dashboard/seeker/billing", label: "Billing" },
-    { icon: Gear, href: "/settings", label: "Settings" },
+    {
+      icon: Bell,
+      href: "/dashboard/freelancer/myProposals",
+      label: "My Proposals Page",
+    },
+    {
+      icon: Briefcase,
+      href: "/dashboard/freelancer/activeProjects",
+      label: "Active Projects Page",
+    },
+    {
+      icon: Envelope,
+      href: "/dashboard/freelancer/myEarnings",
+      label: "My Earnings Page",
+    },
+    {
+      icon: Person,
+      href: "/dashboard/freelancer/editProfile",
+      label: "Edit Profile Page",
+    },
+  ];
+
+  const clientNavLinks = [
+    {
+      icon: Magnifier,
+      href: "/dashboard/client/myTasks",
+      label: "My Tasks View",
+    },
+    {
+      icon: FileText,
+      href: "/dashboard/client/postTasks",
+      label: "Post a Task Form",
+    },
+    {
+      icon: Gear,
+      href: "/dashboard/client/manageProposals",
+      label: "Manage Proposals View",
+    },
   ];
 
   const adminNavLinks = [
-    { icon: House, href: "/dashboard/admin", label: "Dashboard" },
-    { icon: Users, href: "/dashboard/admin/users", label: "Users" },
-    { icon: Building, href: "/dashboard/admin/companies", label: "Companies" },
-    { icon: Briefcase, href: "/dashboard/admin/jobs", label: "Jobs" },
-    { icon: CreditCard, href: "/dashboard/admin/payments", label: "Payments" },
-    { icon: Gear, href: "/dashboard/admin/settings", label: "Settings" },
+    {
+      icon: Users,
+      href: "/dashboard/admin/manageUsers",
+      label: "Manage Users Page",
+    },
+    {
+      icon: Briefcase,
+      href: "/dashboard/admin/manageTasks",
+      label: "Manage Tasks Page",
+    },
+    {
+      icon: CreditCard,
+      href: "/dashboard/admin/history",
+      label: "Transactions History View",
+    },
   ];
 
   const navLinksMap = {
@@ -76,7 +104,7 @@ export async function DashboardSidebar() {
             <Image
               src={
                 user?.image ||
-                "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=80&q=80"
+                "https://thumbs.dreamstime.com/b/anonymous-man-silhouette-isolated-white-background-mysterious-anonymous-man-silhouette-isolated-white-background-perfect-355295760.jpg"
               }
               alt="Avatar"
               fill
