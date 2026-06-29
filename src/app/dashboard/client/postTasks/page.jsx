@@ -38,17 +38,18 @@ export default function PostTaskPage() {
       console.log("Ready for Express Backend Submission:", taskPayload);
 
        const res = await postTasks(taskPayload)
+       console.log(res)
 
-       if (res.insertedId) {
+       if (res.acknowledged) {
+        //    e.target.reset();
          toast.success("Task posted successfully!");
-         e.target.reset();
-         redirect("/dashboard/client/myTasks");
        }
     } catch (error) {
       console.error("Submission failed:", error);
     } finally {
       setLoading(false);
     }
+    redirect("/dashboard/client/myTasks");
   };
 
   return (

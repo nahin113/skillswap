@@ -25,8 +25,11 @@ export const serverMutation = async (path, data, method = "POST") => {
   return handleStatusCode(res);
 };
 
+
 export const serverFetch = async (path) => {
-  const res = await fetch(`${baseUrl}${path}`);
+  const res = await fetch(`${baseUrl}${path}`, { 
+    cache: "no-store"
+  });
   return handleStatusCode(res);
 };
 

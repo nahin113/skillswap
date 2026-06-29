@@ -14,7 +14,6 @@ export default function Navbar() {
   // MOCK AUTH STATE: Change to preview true/false for authenticated routes
   const { data: session } = authClient.useSession();
   const user = session?.user;
-  console.log(user);
   const role = user?.accountType
   const handleSignOut = async () => {
     await authClient.signOut();
