@@ -13,7 +13,7 @@ export default function TaskCard({ task }) {
     task.id || (task._id?.$oid ? task._id.$oid : task._id?.toString());
 
   // Render a fallback string if client data payload attributes are empty
-  const clientName = task.client_name || "Platform Client";
+  const clientName = task.client_email || "Platform Client";
 
   return (
     <Card className="p-6 w-full max-w-[440px] border-none bg-zinc-900 text-zinc-100 rounded-[32px] shadow-2xl hover:scale-[1.01] transition-transform duration-200">
@@ -74,7 +74,7 @@ export default function TaskCard({ task }) {
       {/* Card Footer: Detailed Route Click Redirection Link */}
       <Card.Footer className="p-0 pt-4 border-t border-zinc-800/60 mt-2">
         <Link
-          href={`/dashboard/tasks/${taskId}`}
+          href={`/tasks/${taskId}`}
           className="group flex justify-start items-center gap-2 bg-transparent hover:bg-zinc-800/40 p-0 text-sm font-bold uppercase tracking-wider text-white transition-all duration-200"
           variant="light"
           disableRipple

@@ -11,7 +11,6 @@ export default function Navbar() {
   const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
-  // MOCK AUTH STATE: Change to preview true/false for authenticated routes
   const { data: session } = authClient.useSession();
   const user = session?.user;
   const role = user?.accountType

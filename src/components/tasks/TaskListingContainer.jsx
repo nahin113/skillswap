@@ -109,7 +109,7 @@ export default function TaskListingContainer({ tasks, filters, total }) {
                     <Pagination.Ellipsis />
                   </Pagination.Item>
                 ) : (
-                  <Pagination.Item key={p}>
+                  <Pagination.Item key={`page-${p}-${i}`}>
                     <Pagination.Link
                       isActive={p === page}
                       onPress={() => setPage(p)}
