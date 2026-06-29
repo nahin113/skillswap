@@ -41,15 +41,21 @@ export default function ManageProposalsClient({ initialProposals }) {
   };
 
   // Handle Accept Redirect to Stripe Checkout Loop
-  const handleAcceptRedirect = (proposal) => {
-    // const pId = proposal._id?.toString() || proposal.id;
-    // const tId = proposal.task_id;
-    // const amount = proposal.proposed_budget;
-    // // Route straight to your checkout panel passing core tracking tokens via query params
-    // router.push(
-    //   `/payment/checkout?proposalId=${pId}&taskId=${tId}&amount=${amount}`
-    // );
-  };
+const handleAcceptRedirect = (proposal) => {
+  const pId = proposal._id?.toString() || proposal.id;
+  const tId = proposal.task_id;
+  const amount = proposal.proposed_budget;
+
+  // URL-encode strings to prevent breakages caused by spaces or special characters
+  const title = encodeURIComponent(proposal.task_title || "Project Assignment");
+  const fEmail = encodeURIComponent(proposal.freelancer_email || "");
+  const cEmail = encodeURIComponent(proposal.client_email || "");
+
+  // Route directly to your summary confirmation page with full context parameters
+  router.push(
+    `/payment/checkout?proposalId=${pId}&taskId=${tId}&amount=${amount}&taskTitle=${title}&freelancerEmail=${fEmail}&clientEmail=${cEmail}`
+  );
+};
 
   return (
     <div className="w-full rounded-2xl border border-slate-200 bg-white shadow-sm overflow-hidden">

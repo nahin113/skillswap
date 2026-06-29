@@ -26,7 +26,8 @@ async function getClientReceivedProposals() {
           return proposals.map((proposal) => ({
             ...proposal,
             task_title: task.title,
-            task_status: task.status, 
+            task_status: task.status,
+            client_email: task.client_email,
           }));
         }
         return [];
