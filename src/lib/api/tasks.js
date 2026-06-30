@@ -7,6 +7,9 @@ export const getTasksByemail = async () => {
 export const getTasks = async (queryString) => {
   return serverFetch(`api/tasks?${queryString}`);
 };
+export const getAllTasks = async () => {
+  return serverFetch(`api/tasks`);
+};
 
 export const getTaskById = async (taskId) => {
   return serverFetch(`api/tasks/${taskId}`);

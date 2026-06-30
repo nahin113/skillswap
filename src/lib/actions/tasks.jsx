@@ -13,3 +13,9 @@ export const updateTasks = async (id, data) => {
   revalidatePath("/dashbaord/client/myTasks");
   return result;
 };
+
+export const deleteTaskById = async (id) => {
+  const result = await serverMutation(`api/tasks/${id}`, {}, "DELETE");
+  revalidatePath("/dashboard/admin/manageTasks");
+  return result;
+};
