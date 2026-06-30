@@ -77,7 +77,7 @@ export async function DashboardSidebar() {
     },
     {
       icon: CreditCard,
-      href: "/dashboard/admin/history",
+      href: "/dashboard/admin/transactionsHistory",
       label: "Transactions History View",
     },
   ];
