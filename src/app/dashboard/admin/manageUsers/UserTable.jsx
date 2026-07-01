@@ -2,9 +2,10 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import { Table, Button, toast } from "@heroui/react";
+import { Table, Button} from "@heroui/react";
 import { Mail, ShieldAlert, ShieldCheck } from "lucide-react";
 import { updateUserStatus } from "@/lib/actions/users";
+import { toast } from "react-toastify";
 
 export default function UserTable({ initialUsers }) {
   const [users, setUsers] = useState(initialUsers || []);

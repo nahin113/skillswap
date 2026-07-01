@@ -1,10 +1,11 @@
 "use client";
-
 import React, { useState, useEffect } from "react";
 import { Table, Button, Chip } from "@heroui/react";
 import { Edit3, Trash2, Calendar, DollarSign } from "lucide-react";
 import { getTasksByemail } from "@/lib/api/tasks";
 import EditTaskModal from "@/components/Clients/EditTaskModal";
+import { deleteTaskById } from "@/lib/actions/tasks";
+import { toast } from "react-toastify";
 
 export default function MyTasksPage() {
   const [tasks, setTasks] = useState([]);
@@ -13,12 +14,15 @@ export default function MyTasksPage() {
   const [isEditOpen, setIsEditOpen] = useState(false);
   const [selectedEditTask, setSelectedEditTask] = useState(null);
 
-  // 🔌 Fetch real data from your Express backend on component mount
+  // Delete confirmation modal state
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [pendingDelete, setPendingDelete] = useState(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+
   useEffect(() => {
     const fetchMyTasks = async () => {
       setLoading(true);
       try {
-        // ✅ Your fetching logic goes right here
         const data = await getTasksByemail();
         setTasks(data || []);
       } catch (error) {
@@ -44,16 +48,37 @@ export default function MyTasksPage() {
           : t
       )
     );
+    toast.success("Task Edited Successfully");
   };
 
-  const handleDeleteClick = async (taskId) => {
-    if (!confirm("Are you sure you want to permanently remove this job block?"))
-      return;
+  const handleDeleteClick = (task) => {
+    setPendingDelete(task);
+    setIsConfirmOpen(true);
+  };
+
+  const closeDeleteModal = () => {
+    setIsConfirmOpen(false);
+    setPendingDelete(null);
+    setIsDeleting(false);
+  };
+
+  const confirmDelete = async () => {
+    if (!pendingDelete) return;
+
+    setIsDeleting(true);
     try {
-      // await serverMutation(`/api/tasks/${taskId}`, {}, "DELETE");
-      setTasks((prev) => prev.filter((t) => (t.id || t._id) !== taskId));
+      const taskId = pendingDelete.id || pendingDelete._id;
+      const res = await deleteTaskById(taskId);
+
+      if (res.acknowledged) {
+        setTasks((prev) => prev.filter((t) => (t.id || t._id) !== taskId));
+        toast.success("Task Deleted Successfully");
+        closeDeleteModal();
+      }
     } catch (error) {
-      console.error("Delete sequence failure:", error);
+      console.error("Delete failed:", error);
+      toast.error("Failed to delete task");
+      setIsDeleting(false);
     }
   };
 
@@ -158,7 +183,6 @@ export default function MyTasksPage() {
 
                     <Table.Cell className="px-6 py-4 text-center">
                       <div className="flex items-center justify-center gap-2">
-                        {/* 🔒 Show edit icon button ONLY if task status is open */}
                         {task.status === "open" ? (
                           <Button
                             isIconOnly
@@ -179,20 +203,29 @@ export default function MyTasksPage() {
                           </div>
                         )}
 
-                        <Button
-                          isIconOnly
-                          size="sm"
-                          variant="light"
-                          disabled={!isDeletable}
-                          onPress={() => handleDeleteClick(rowId)}
-                          className={`rounded-xl ${
-                            isDeletable
-                              ? "text-zinc-600 hover:bg-red-50 hover:text-red-600"
-                              : "text-zinc-200 cursor-not-allowed"
-                          }`}
-                        >
-                          <Trash2 className="w-4 h-4" />
-                        </Button>
+                        {task.status === "open" ? (
+                          <Button
+                            isIconOnly
+                            size="sm"
+                            variant="light"
+                            disabled={!isDeletable}
+                            onPress={() => handleDeleteClick(task)}
+                            className={`rounded-xl ${
+                              isDeletable
+                                ? "text-zinc-600 hover:bg-red-50 hover:text-red-600"
+                                : "text-zinc-200 cursor-not-allowed"
+                            }`}
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        ) : (
+                          <div
+                            className="w-8 h-8 flex items-center justify-center text-zinc-200 select-none cursor-not-allowed"
+                            title="Delete locked for active tasks"
+                          >
+                            <Trash2 className="w-4 h-4 opacity-20" />
+                          </div>
+                        )}
                       </div>
                     </Table.Cell>
                   </Table.Row>
@@ -202,6 +235,52 @@ export default function MyTasksPage() {
           </Table.Content>
         </Table.ScrollContainer>
       </Table>
+
+      {/* Delete Confirmation Modal */}
+      {isConfirmOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 backdrop-blur-sm bg-slate-900/40">
+          <div className="w-full max-w-sm bg-white border border-slate-200 rounded-2xl p-6 shadow-xl space-y-6 animate-in fade-in zoom-in-95 duration-150">
+            <div className="space-y-2">
+              <h3 className="text-base font-bold text-slate-900">
+                Confirm Task Deletion
+              </h3>
+              <p className="text-xs text-slate-500 leading-relaxed">
+                Are you sure you want to completely remove{" "}
+                <span className="text-slate-900 font-semibold italic">
+                  "{pendingDelete?.title}"
+                </span>{" "}
+                posted by{" "}
+                <span className="text-slate-700 font-mono text-[11px] font-medium">
+                  {pendingDelete?.client_email}
+                </span>
+                ? This completely cleanses the task record and terminates
+                matching applications immediately.
+              </p>
+            </div>
+
+            <div className="flex items-center justify-end gap-3 text-xs font-semibold">
+              <button
+                disabled={isDeleting}
+                onClick={closeDeleteModal}
+                className="px-4 py-2 text-slate-500 hover:text-slate-700 bg-slate-100 hover:bg-slate-200/80 border border-slate-200 rounded-lg transition-colors disabled:opacity-50"
+              >
+                Cancel
+              </button>
+              <button
+                disabled={isDeleting}
+                onClick={confirmDelete}
+                className="px-4 py-2 text-white bg-rose-600 hover:bg-rose-700 rounded-lg transition-colors shadow-sm disabled:opacity-50 min-w-[76px] flex items-center justify-center"
+              >
+                {isDeleting ? (
+                  <span className="w-4 h-4 border-2 border-white/30 border-t-white rounded-full animate-spin" />
+                ) : (
+                  "Delete Task"
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Mounted Overlay Edit Portal Modal */}
       <EditTaskModal

@@ -2,8 +2,9 @@
 
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { Button, toast } from "@heroui/react";
+import { Button} from "@heroui/react";
 import { updateProposal } from "@/lib/actions/proposals";
+import { toast } from "react-toastify";
 
 export default function ManageProposalsClient({ initialProposals }) {
   const router = useRouter();
@@ -25,7 +26,7 @@ export default function ManageProposalsClient({ initialProposals }) {
     try {
       const result = await updateProposal(proposalId, { status: "Rejected" });
       if (result.modifiedCount) {
-        toast(`Proposal Rejected`);
+        toast.warning(`Proposal Rejected`);
       }
       // Update UI state cleanly
       setProposals((prev) =>

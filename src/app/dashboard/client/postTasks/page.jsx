@@ -5,13 +5,13 @@ import { PlusCircle } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { postTasks } from "@/lib/actions/tasks";
 import { redirect } from "next/navigation";
-import { toast } from "@heroui/react";
+import { toast } from "react-toastify";
 
 export default function PostTaskPage() {
   const [loading, setLoading] = useState(false);
 
-    const { data: session } = authClient.useSession();
-    const user = session?.user;
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
@@ -37,13 +37,13 @@ export default function PostTaskPage() {
     try {
       console.log("Ready for Express Backend Submission:", taskPayload);
 
-       const res = await postTasks(taskPayload)
-       console.log(res)
+      const res = await postTasks(taskPayload);
+      console.log(res);
 
-       if (res.acknowledged) {
-        //    e.target.reset();
-         toast.success("Task posted successfully!");
-       }
+      if (res.acknowledged) {
+        e.target.reset();
+        toast.success("Task posted successfully!");
+      }
     } catch (error) {
       console.error("Submission failed:", error);
     } finally {

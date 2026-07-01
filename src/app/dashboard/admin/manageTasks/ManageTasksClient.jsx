@@ -1,8 +1,9 @@
 "use client";
 
 import React, { useState } from "react";
-import { Button, toast } from "@heroui/react";
+import { Button } from "@heroui/react";
 import { deleteTaskById } from "@/lib/actions/tasks";
+import { toast } from "react-toastify";
 
 
 export default function ManageTasksClient({ initialTasks }) {

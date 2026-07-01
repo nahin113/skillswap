@@ -16,7 +16,8 @@ import {
   Plus,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { Input, toast } from "@heroui/react";
+import { Input} from "@heroui/react";
+import { toast } from "react-toastify";
 
 // Sample skillset bank for matching suggestions
 const SUGGESTED_SKILLS = [
@@ -116,7 +117,7 @@ export default function SignUpPage() {
 
       if (error) {
         console.error("Signup error details:", error.message);
-        toast.danger(error.message || "Something went wrong.");
+        toast.error(error.message || "Something went wrong.");
         return; // Halts workflow so false redirects don't occur
       }
 
@@ -124,7 +125,7 @@ export default function SignUpPage() {
       router.push(redirectTo);
     } catch (err) {
       console.error("Unexpected error:", err);
-      toast.danger("An unexpected error occurred.");
+      toast.error("An unexpected error occurred.");
     } finally {
       setIsLoading(false);
     }

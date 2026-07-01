@@ -12,7 +12,6 @@ export default function EditTaskModal({
 }) {
   const [updating, setUpdating] = useState(false);
   if (!isOpen || !task) return null;
-  console.log(task);
   const handleSubmit = async (e) => {
     e.preventDefault();
     setUpdating(true);

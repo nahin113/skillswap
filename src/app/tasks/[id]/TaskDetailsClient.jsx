@@ -1,11 +1,12 @@
 "use client";
 
 import React, { useState } from "react";
-import { Card, Input, Button, TextArea, toast } from "@heroui/react";
+import { Card, Input, Button, TextArea } from "@heroui/react";
 import { Calendar, CircleDollar, Briefcase, Envelope } from "@gravity-ui/icons";
 import { postProposals } from "@/lib/actions/proposals";
 import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
+import { toast } from "react-toastify";
 
 export default function TaskDetailsClient({ task }) {
   // 🔑 AUTHENTICATION CONFIGURATION
