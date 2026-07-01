@@ -9,6 +9,7 @@ import {
   Bookmark,
   FileText,
   CreditCard,
+  PersonGear,
 } from "@gravity-ui/icons";
 import { Building, Users } from "lucide-react";
 import Link from "next/link";
@@ -65,6 +66,11 @@ export async function DashboardSidebar() {
   ];
 
   const adminNavLinks = [
+    {
+      icon: PersonGear,
+      href: "/dashboard/admin",
+      label: "Overview Statistics",
+    },
     {
       icon: Users,
       href: "/dashboard/admin/manageUsers",
