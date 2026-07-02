@@ -14,7 +14,7 @@ import {
 import { Building, Users } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
-import MobileNavWrapper from "./MobileNavWrapper"; // 🛠️ Import our clean trigger file
+import MobileNavWrapper from "./MobileNavWrapper"; 
 
 export async function DashboardSidebar() {
   const user = await getUserSession();
@@ -48,6 +48,11 @@ export async function DashboardSidebar() {
   ];
 
   const clientNavLinks = [
+    {
+      icon: PersonGear,
+      href: "/dashboard/client",
+      label: "Overview Statistics",
+    },
     {
       icon: Magnifier,
       href: "/dashboard/client/myTasks",

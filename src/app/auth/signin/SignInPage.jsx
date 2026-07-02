@@ -7,6 +7,7 @@ import { useRouter } from "next/navigation";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 import { FcGoogle } from "react-icons/fc";
+import { toast } from "react-toastify";
 
 export default function SignInPage() {
   const router = useRouter();
@@ -50,6 +51,7 @@ export default function SignInPage() {
 
       // Handle successful login
       if (data && data.user) {
+        toast.success("Logged In Successfully")
         handleRouteRedirect(data.user.role || "client");
       } else {
         handleRouteRedirect("client");

@@ -98,7 +98,6 @@ export default function SignUpPage() {
       setIsLoading(false);
       return;
     }
-    console.log(skills);
     try {
       // Connects cleanly with your authClient backend configuration
       const { data, error } = await authClient.signUp.email({
