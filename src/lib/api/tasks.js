@@ -14,3 +14,4 @@ export const getAllTasks = async () => {
 export const getTaskById = async (taskId) => {
   return serverFetch(`api/tasks/${taskId}`);
 };
+
