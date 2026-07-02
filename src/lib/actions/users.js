@@ -3,6 +3,8 @@
 import { headers } from "next/headers";
 import { auth } from "../auth";
 import { revalidatePath } from "next/cache";
+import { serverMutation } from "../core/server";
+import { redirect } from "next/navigation";
 
 export const updateUserStatus = async (userId, status) => {
   try {
@@ -14,7 +16,7 @@ export const updateUserStatus = async (userId, status) => {
       result = await auth.api.banUser({
         body: {
           userId: userId,
-          banReason: "Suspended by Administrator", // Optional reason string
+          banReason: "Suspended by Administrator", 
         },
         headers: requestHeaders,
       });
@@ -42,4 +44,11 @@ export const updateUserStatus = async (userId, status) => {
           : "An unexpected error occurred.",
     };
   }
+};
+
+export const updateFreelancer = async (id, data) => {
+  const result = serverMutation(`api/user/${id}`, data, "PATCH");
+  revalidatePath("/dashboard/freelancer/editProfile");
+  redirect("/myProfile");
+  return result;
 };
