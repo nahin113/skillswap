@@ -53,6 +53,7 @@ export default function ActiveProjectsClient({ activeList, completedList }) {
         ...selectedProject,
         status: "completed",
         deliverable_url: deliverableUrl,
+        completed_at: new Date(),
       };
 
       setActiveProjects((prev) =>
