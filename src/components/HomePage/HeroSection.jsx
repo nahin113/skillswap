@@ -3,6 +3,7 @@ import Link from "next/link";
 import { motion, useMotionValue, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
 import { ArrowRight, Play, Users, CheckCircle, BarChart3 } from "lucide-react";
+import { authClient } from "@/lib/auth-client";
 
 const HeroSection = () => {
   const [isClient, setIsClient] = useState(false);
@@ -83,6 +84,10 @@ const HeroSection = () => {
   // Scrolling animation
   const x = useMotionValue(0);
 
+  const { data: session } = authClient.useSession();
+  const user = session?.user;
+  const role = user?.accountType;
+
   useEffect(() => {
     setIsClient(true);
 
@@ -145,13 +150,23 @@ const HeroSection = () => {
             transition={{ duration: 0.6, delay: 0.3 }}
             className="mt-8 flex flex-wrap items-center justify-center gap-4"
           >
-            <Link
-              href="/sign-up"
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#1C1E1B] text-[#F4EFEA] font-medium rounded-full hover:bg-[#2A2D2A] transition-all hover:scale-105 shadow-lg"
-            >
-              Post a Task
-              <ArrowRight className="w-4 h-4" />
-            </Link>
+            {role === "client" ? (
+              <Link
+                href="/dashboard/client/postTasks"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1C1E1B] text-[#F4EFEA] font-medium rounded-full hover:bg-[#2A2D2A] transition-all hover:scale-105 shadow-lg"
+              >
+                Post a Task
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            ) : (
+              <Link
+                href="/tasks"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1C1E1B] text-[#F4EFEA] font-medium rounded-full hover:bg-[#2A2D2A] transition-all hover:scale-105 shadow-lg"
+              >
+                Browse Tasks
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+            )}
           </motion.div>
         </div>
 

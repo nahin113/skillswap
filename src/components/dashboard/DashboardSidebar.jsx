@@ -21,6 +21,11 @@ export async function DashboardSidebar() {
 
   const freelancerNavLinks = [
     {
+      icon: PersonGear,
+      href: "/dashboard/freelancer",
+      label: "Overview Statistics",
+    },
+    {
       icon: Magnifier,
       href: "/tasks",
       label: "Browse Tasks View",

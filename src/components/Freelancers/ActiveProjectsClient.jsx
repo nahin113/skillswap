@@ -36,9 +36,6 @@ export default function ActiveProjectsClient({ activeList, completedList }) {
     const projectId = selectedProject._id || selectedProject.id;
 
     try {
-      // COMMENT FOR DEV:
-      // This action hits your app.patch("/api/tasks/:id") endpoint.
-      // Payload sent: { status: "completed", deliverable_url: "..." }
       const res = await updateTasks(projectId, {
         status: "completed",
         deliverable_url: deliverableUrl,

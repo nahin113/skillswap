@@ -75,7 +75,7 @@ export default function TaskListingContainer({ tasks, filters, total }) {
         setSelectedCategory={setSelectedCategory}
       />
 
-      <div className="max-w-7xl mx-auto mb-6 text-sm text-zinc-500">
+      <div className="max-w-7xl mx-auto mb-6 text-sm font-medium text-zinc-500 px-2">
         Showing {tasks.length} position{tasks.length !== 1 && "s"}
       </div>
 
@@ -89,28 +89,37 @@ export default function TaskListingContainer({ tasks, filters, total }) {
               />
             ))}
           </div>
-          <Pagination className="w-full">
-            <Pagination.Summary>
+
+          {/* Styled Pagination Controls Wrapper */}
+          <Pagination className="w-full mt-10">
+            <Pagination.Summary className="text-zinc-500 font-medium text-xs">
               Showing {startItem}-{endItem} of {totalItems} results
             </Pagination.Summary>
-            <Pagination.Content>
+            <Pagination.Content className="gap-1 bg-white p-1.5 rounded-xl border border-[#E6DDD4] shadow-sm">
               <Pagination.Item>
                 <Pagination.Previous
+                  className="text-zinc-600 hover:bg-[#F4EFEA] hover:text-[#1C1E1B] font-bold text-xs px-3 py-1.5 rounded-lg transition-colors"
                   isDisabled={page === 1}
                   onPress={() => setPage((p) => p - 1)}
                 >
-                  <Pagination.PreviousIcon />
+                  <Pagination.PreviousIcon className="text-zinc-500" />
                   <span>Previous</span>
                 </Pagination.Previous>
               </Pagination.Item>
+
               {getPageNumbers().map((p, i) =>
                 p === "ellipsis" ? (
                   <Pagination.Item key={`ellipsis-${i}`}>
-                    <Pagination.Ellipsis />
+                    <Pagination.Ellipsis className="text-zinc-400" />
                   </Pagination.Item>
                 ) : (
                   <Pagination.Item key={`page-${p}-${i}`}>
                     <Pagination.Link
+                      className={`text-xs font-bold px-3 py-1.5 rounded-lg transition-all ${
+                        p === page
+                          ? "bg-[#1C1E1B] text-[#F4EFEA]"
+                          : "text-zinc-600 hover:bg-[#F4EFEA] hover:text-[#1C1E1B]"
+                      }`}
                       isActive={p === page}
                       onPress={() => setPage(p)}
                     >
@@ -119,21 +128,23 @@ export default function TaskListingContainer({ tasks, filters, total }) {
                   </Pagination.Item>
                 )
               )}
+
               <Pagination.Item>
                 <Pagination.Next
+                  className="text-zinc-600 hover:bg-[#F4EFEA] hover:text-[#1C1E1B] font-bold text-xs px-3 py-1.5 rounded-lg transition-colors"
                   isDisabled={page === totalPages}
                   onPress={() => setPage((p) => p + 1)}
                 >
                   <span>Next</span>
-                  <Pagination.NextIcon />
+                  <Pagination.NextIcon className="text-zinc-500" />
                 </Pagination.Next>
               </Pagination.Item>
             </Pagination.Content>
           </Pagination>
         </>
       ) : (
-        <div className="text-center py-20 border border-dashed border-zinc-800 rounded-[32px] max-w-7xl mx-auto">
-          <p className="text-zinc-500 text-lg">
+        <div className="text-center py-20 bg-white border border-[#E6DDD4] rounded-[32px] max-w-7xl mx-auto shadow-sm">
+          <p className="text-zinc-400 text-sm font-medium">
             No positions match your search criteria.
           </p>
         </div>
