@@ -21,11 +21,11 @@
 
 ## 📸 Screenshots
 
-> Replace the paths below with your actual screenshots before publishing.
 
 ![Home Page](./assets/readme/home.png)
 ![Dashboard](./assets/readme/dashboard.png)
-![Demo](./assets/readme/demo.gif)
+![Demo](./assets/readme/home.gif)
+![Demo](./assets/readme/dashboard.gif)
 
 ---
 
