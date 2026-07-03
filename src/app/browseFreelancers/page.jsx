@@ -4,7 +4,6 @@ import React from "react";
 
 export default async function FreelancersPage() {
   const data = await getFreelancersList();
-  console.log(data)
 
   return (
     <div className="min-h-screen bg-[#F4EFEA] p-6 sm:p-10 text-[#1C1E1B]">

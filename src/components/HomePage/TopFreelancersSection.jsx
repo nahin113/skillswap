@@ -1,58 +1,35 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { DollarSign, Star } from "lucide-react";
+import { getFreelancersList } from "@/lib/api/freelancers";
 
 export default function TopFreelancersSection() {
-  // Mock Data: Array of Top Freelancers
-  const topFreelancers = [
-    {
-      id: 1,
-      name: "Sarah Jenkins",
-      role: "Senior UI/UX Designer",
-      rating: 4.9,
-      reviews: 128,
-      jobsCompleted: 145,
-      image:
-        "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=150&q=80",
-      skills: ["Figma", "Web Design", "UI/UX"],
-    },
-    {
-      id: 2,
-      name: "David Chen",
-      role: "Full-Stack Developer",
-      rating: 5.0,
-      reviews: 89,
-      jobsCompleted: 94,
-      image:
-        "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&q=80",
-      skills: ["React", "Node.js", "MongoDB"],
-    },
-    {
-      id: 3,
-      name: "Elena Rodriguez",
-      role: "SEO Specialist",
-      rating: 4.8,
-      reviews: 210,
-      jobsCompleted: 230,
-      image:
-        "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&q=80",
-      skills: ["Copywriting", "SEO", "Blogs"],
-    },
-    {
-      id: 4,
-      name: "Marcus Thorne",
-      role: "Brand Designer",
-      rating: 4.9,
-      reviews: 156,
-      jobsCompleted: 162,
-      image:
-        "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&q=80",
-      skills: ["Logos", "Illustrator", "Brand"],
-    },
-  ];
+  const [topFreelancers, setTopFreelancers] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchFreelancers = async () => {
+      try {
+        setLoading(true);
+        const allFreelancers = await getFreelancersList();
+        // Slice the first 4 freelancers to fit the desktop scattered layout perfectly
+        const start = allFreelancers.length-4 ;
+        const end = allFreelancers.length ;
+        setTopFreelancers((allFreelancers || []).slice(8, 12));
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchFreelancers();
+  }, []);
 
   // Framer Motion Animation Variants
   const containerVariants = {
@@ -72,6 +49,22 @@ export default function TopFreelancersSection() {
     },
   };
 
+  if (loading) {
+    return (
+      <div className="w-full py-24 bg-[#F4EFEA] flex justify-center items-center text-zinc-400 font-medium text-sm">
+        Discovering elite platform talent...
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="w-full py-24 bg-[#F4EFEA] flex justify-center items-center text-red-500 font-medium text-sm">
+        Failed to load freelancers: {error}
+      </div>
+    );
+  }
+
   return (
     <section className="w-full bg-[#F4EFEA] py-24 lg:py-32 font-sans overflow-hidden">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
@@ -80,12 +73,12 @@ export default function TopFreelancersSection() {
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1C1E1B] tracking-tight">
             Work with <span className="text-[#4E654C]">Top Talent</span>
           </h2>
-          <p className="text-base sm:text-lg text-[#5A5E5A] max-w-2xl leading-relaxed">
+          <p className="text-base sm:text-lg text-[#5A5E5A] max-w-2xl leading-relaxed font-medium">
             Connect with highly rated professionals who consistently deliver
             exceptional quality on our marketplace.
           </p>
           <Link
-            href="/freelancers"
+            href="/browseFreelancers"
             className="inline-flex items-center space-x-2 text-sm font-bold text-[#1C1E1B] hover:text-[#4E654C] transition-colors group pt-2"
           >
             <span>Explore All Freelancers</span>
@@ -114,71 +107,78 @@ export default function TopFreelancersSection() {
           className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 lg:gap-8 pb-16"
         >
           {topFreelancers.map((freelancer, index) => {
-            // Apply different top margins to create the "scattered here and there" look on desktop
+            // Apply staggered offsets on large screens
             const staggeredOffsets = [
-              "lg:mt-0", // Card 1: Normal
-              "lg:mt-16", // Card 2: Pushed down heavily
-              "lg:mt-6", // Card 3: Pushed down slightly
-              "lg:mt-24", // Card 4: Pushed down the most
+              "lg:mt-0", // Card 1
+              "lg:mt-16", // Card 2
+              "lg:mt-6", // Card 3
+              "lg:mt-24", // Card 4
             ];
+
+            const freelancerId = freelancer._id?.$oid || freelancer._id;
 
             return (
               <motion.div
-                key={freelancer.id}
+                key={freelancerId}
                 variants={cardVariants}
                 whileHover={{ y: -8, scale: 1.02 }}
-                // Extreme rounding with rounded-[3rem] and staggered margin array applied
-                className={`bg-white border border-[#E6DDD4] rounded-[3rem] p-8 flex flex-col transition-all duration-300 shadow-sm hover:shadow-xl ${staggeredOffsets[index]}`}
+                className={`bg-white border border-[#E6DDD4] rounded-[3rem] p-8 flex flex-col transition-all duration-300 shadow-sm hover:shadow-xl ${
+                  staggeredOffsets[index % staggeredOffsets.length]
+                }`}
               >
                 {/* Card Header: Avatar & Info */}
-                <div className="flex flex-col items-center text-center space-y-4 mb-6">
+                <div className="flex flex-col items-center text-center space-y-4 mb-5">
                   <div className="relative w-20 h-20 rounded-full overflow-hidden border-4 border-[#F4EFEA] shadow-sm shrink-0">
                     <Image
-                      src={freelancer.image}
-                      alt={`${freelancer.name} Profile Picture`}
+                      src={
+                        freelancer.image ||
+                        "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop"
+                      }
+                      alt={`${freelancer.name || "Freelancer"} Profile Picture`}
                       fill
                       className="object-cover"
                       sizes="80px"
                     />
                   </div>
                   <div>
-                    <h3 className="text-xl font-bold text-[#1C1E1B] leading-tight truncate">
-                      {freelancer.name}
+                    <h3 className="text-xl font-black text-[#1C1E1B] leading-tight truncate max-w-[200px]">
+                      {freelancer.name || "Anonymous User"}
                     </h3>
-                    <p className="text-sm text-[#5A5E5A] font-medium mt-1">
-                      {freelancer.role}
+                    <p className="text-xs text-[#4E654C] font-bold uppercase tracking-wider mt-1">
+                      {freelancer.skills?.[0]
+                        ? `${freelancer.skills[0]} Expert`
+                        : "Verified Provider"}
                     </p>
                   </div>
                 </div>
 
-                {/* Stats Row: Rating & Jobs Completed */}
-                <div className="flex flex-col items-center space-y-2 mb-6 bg-[#F4EFEA]/60 rounded-3xl p-4 border border-[#E6DDD4]/50">
-                  <div className="flex items-center space-x-1.5">
-                    <svg
-                      className="w-5 h-5 text-amber-500"
-                      fill="currentColor"
-                      viewBox="0 0 20 20"
-                    >
-                      <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.07 3.292a1 1 0 00.95.69h3.462c.969 0 1.371 1.24.588 1.81l-2.8 2.034a1 1 0 00-.364 1.118l1.07 3.292c.3.921-.755 1.688-1.54 1.118l-2.8-2.034a1 1 0 00-1.175 0l-2.8 2.034c-.784.57-1.838-.197-1.539-1.118l1.07-3.292a1 1 0 00-.364-1.118L2.98 8.72c-.783-.57-.38-1.81.588-1.81h3.461a1 1 0 00.951-.69l1.07-3.292z" />
-                    </svg>
-                    <span className="text-base font-bold text-[#1C1E1B]">
-                      {freelancer.rating}
+                {/* Bio Snippet Area */}
+                {freelancer.bio && (
+                  <p className="text-xs text-zinc-500 font-medium text-center line-clamp-2 mb-4 leading-relaxed px-1">
+                    "{freelancer.bio}"
+                  </p>
+                )}
+
+                {/* Stats Row: Rating & Hourly Rate */}
+                <div className="flex justify-between items-center space-x-2 mb-6 bg-[#F4EFEA]/60 rounded-2xl p-3.5 border border-[#E6DDD4]/50 mt-auto">
+                  <div className="flex items-center space-x-1">
+                    <Star className="w-4 h-4 text-amber-500 fill-amber-500" />
+                    <span className="text-sm font-black text-[#1C1E1B]">
+                      5.0
                     </span>
                   </div>
-                  <div className="text-sm font-medium text-[#5A5E5A]">
-                    <span className="text-[#1C1E1B] font-bold">
-                      {freelancer.jobsCompleted}
-                    </span>{" "}
-                    Jobs Done
+                  <div className="text-xs font-bold text-[#4E654C] flex items-center bg-[#EBF0EC] px-2.5 py-1 rounded-full border border-[#D4DCCE]/50">
+                    <DollarSign className="w-3 h-3 shrink-0" />
+                    <span>{freelancer.rate || "25"}/hr</span>
                   </div>
                 </div>
 
                 {/* Skills Tag Cloud */}
-                <div className="flex flex-wrap justify-center gap-2 mb-8 mt-auto">
-                  {freelancer.skills.map((skill, index) => (
+                <div className="flex flex-wrap justify-center gap-1.5 mb-6">
+                  {(freelancer.skills || []).slice(0, 3).map((skill, sIdx) => (
                     <span
-                      key={index}
-                      className="inline-block px-3 py-1.5 bg-[#EBF0EC] text-[#4E654C] text-xs font-bold rounded-full border border-[#D4DCCE]/50"
+                      key={sIdx}
+                      className="inline-block px-2.5 py-1 bg-[#F4EFEA]/40 text-zinc-600 text-[11px] font-semibold rounded-full border border-[#E6DDD4]/40"
                     >
                       {skill}
                     </span>
@@ -187,8 +187,8 @@ export default function TopFreelancersSection() {
 
                 {/* Action Button */}
                 <Link
-                  href={`/freelancers/${freelancer.id}`}
-                  className="w-full inline-flex justify-center items-center py-3.5 bg-[#1C1E1B] text-[#F4EFEA] hover:bg-[#4E654C] text-sm font-semibold rounded-full transition-colors duration-200"
+                  href={`/browseFreelancers/${freelancerId}`}
+                  className="w-full inline-flex justify-center items-center py-3.5 bg-[#1C1E1B] text-[#F4EFEA] hover:bg-[#4E654C] text-xs font-bold uppercase tracking-wider rounded-full transition-colors duration-200 shadow-sm"
                 >
                   View Profile
                 </Link>

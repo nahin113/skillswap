@@ -3,87 +3,48 @@ import { motion } from "framer-motion";
 import {
   Calendar,
   DollarSign,
-  User,
   FolderOpen,
-  Clock,
   ArrowRight,
+  Briefcase,
   TrendingUp,
   Target,
-  Briefcase,
-  CheckCircle,
+  Layout,
+  BrainCircuit,
+  Database,
 } from "lucide-react";
 import Link from "next/link";
 import Image from "next/image";
+import { useEffect, useState } from "react";
+import { getAllTasks } from "@/lib/api/tasks";
 
 const LatestTasksSection = () => {
-  // Raw data - replace with your database fetch later
-  const leftTasks = [
-    {
-      id: 1,
-      title: "Brand Identity Design",
-      client: "NovaTech Solutions",
-      category: "Design & Branding",
-      budget: 8500,
-      dueDate: "2026-07-15",
-      status: "In Progress",
-      icon: TrendingUp,
-    },
-    {
-      id: 2,
-      title: "E-Commerce Website Dev",
-      client: "GreenLeaf Organics",
-      category: "Web Development",
-      budget: 12500,
-      dueDate: "2026-07-28",
-      status: "Open",
-      icon: Target,
-    },
-    {
-      id: 3,
-      title: "Social Media Campaign",
-      client: "FitnessFirst App",
-      category: "Marketing",
-      budget: 4200,
-      dueDate: "2026-08-05",
-      status: "Open",
-      icon: Briefcase,
-    },
-  ];
+  const [leftTasks, setLeftTasks] = useState([]);
+  const [rightTasks, setRightTasks] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const rightTasks = [
-    {
-      id: 4,
-      title: "Mobile App UI/UX Redesign",
-      client: "HealthTrack Medical",
-      category: "UI/UX Design",
-      budget: 9800,
-      dueDate: "2026-08-12",
-      status: "In Review",
-      icon: TrendingUp,
-    },
-    {
-      id: 5,
-      title: "Content Marketing Strategy",
-      client: "EcoWave Sustainability",
-      category: "Content Creation",
-      budget: 3600,
-      dueDate: "2026-07-22",
-      status: "Open",
-      icon: Target,
-    },
-    {
-      id: 6,
-      title: "CRM System Integration",
-      client: "SalesForce Solutions",
-      category: "Development",
-      budget: 15000,
-      dueDate: "2026-08-20",
-      status: "Open",
-      icon: Briefcase,
-    },
-  ];
+  useEffect(() => {
+    const fetchTasks = async () => {
+      try {
+        setLoading(true);
+        const allTasks = await getAllTasks();
 
-  // Combine all tasks for mobile view
+        // Safely segment your incoming backend task arrays
+        const firstThree = (allTasks || []).slice(0, 3);
+        const secondThree = (allTasks || []).slice(3, 6);
+
+        setLeftTasks(firstThree);
+        setRightTasks(secondThree);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchTasks();
+  }, []);
+
   const allTasks = [...leftTasks, ...rightTasks];
 
   const formatCurrency = (amount) => {
@@ -96,6 +57,7 @@ const LatestTasksSection = () => {
   };
 
   const formatDate = (dateString) => {
+    if (!dateString) return "No Limit";
     const date = new Date(dateString);
     return new Intl.DateTimeFormat("en-US", {
       month: "short",
@@ -103,67 +65,102 @@ const LatestTasksSection = () => {
     }).format(date);
   };
 
-  const getStatusColor = (status) => {
-    const colors = {
-      Open: "bg-green-100 text-green-700",
-      "In Progress": "bg-blue-100 text-blue-700",
-      "In Review": "bg-yellow-100 text-yellow-700",
-      Completed: "bg-gray-100 text-gray-700",
-    };
-    return colors[status] || "bg-gray-100 text-gray-700";
+  // Maps live category text strings safely to Lucide icons
+  const getCategoryIcon = (category) => {
+    switch (category) {
+      case "Web Development":
+        return Layout;
+      case "Data Science":
+        return Database;
+      case "Machine Learning":
+        return BrainCircuit;
+      case "UI UX Design":
+        return Target;
+      default:
+        return Briefcase;
+    }
   };
 
-  const TaskCard = ({ task, delay }) => (
-    <motion.div
-      initial={{ opacity: 0, x: -20 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.5, delay }}
-      viewport={{ once: true }}
-      className="group bg-white/70 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-3 sm:p-4 border border-[#E6DDD4]/50 hover:border-[#D4CCC4]"
-    >
-      <div className="flex items-start gap-2 sm:gap-3">
-        {/* Icon */}
-        <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#1C1E1B]/5 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
-          <task.icon className="w-4 h-4 sm:w-5 sm:h-5 text-[#1C1E1B]" />
-        </div>
+  const getStatusColor = (status) => {
+    const normalize = status?.toLowerCase() || "open";
+    if (normalize === "open") return "bg-green-100 text-green-700 font-bold";
+    return "bg-zinc-100 text-zinc-600 font-bold";
+  };
 
-        {/* Content */}
-        <div className="flex-1 min-w-0">
-          <div className="flex items-start justify-between gap-2">
-            <h4 className="text-xs sm:text-sm font-semibold text-[#1C1E1B] truncate">
-              {task.title}
-            </h4>
-            <span
-              className={`text-[10px] sm:text-xs px-1.5 sm:px-2 py-0.5 rounded-full ${getStatusColor(
-                task.status
-              )} flex-shrink-0 whitespace-nowrap`}
-            >
-              {task.status}
-            </span>
+  const TaskCard = ({ task, delay }) => {
+    const IconComponent = getCategoryIcon(task.category);
+    const taskId = task._id?.$oid || task._id;
+
+    return (
+      <motion.div
+        initial={{ opacity: 0, x: -20 }}
+        whileInView={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay }}
+        viewport={{ once: true }}
+        className="group bg-white/70 backdrop-blur-sm rounded-xl shadow-sm hover:shadow-md transition-all duration-300 p-3 sm:p-4 border border-[#E6DDD4]/50 hover:border-[#D4CCC4]"
+      >
+        <div className="flex items-start gap-2 sm:gap-3">
+          {/* Dynamic Icon Wrapper */}
+          <div className="w-8 h-8 sm:w-10 sm:h-10 rounded-full bg-[#1C1E1B]/5 flex items-center justify-center flex-shrink-0 mt-0.5 sm:mt-1">
+            <IconComponent className="w-4 h-4 sm:w-5 sm:h-5 text-[#1C1E1B]" />
           </div>
 
-          <p className="text-[10px] sm:text-xs text-[#5A5E5A] mt-0.5">
-            {task.client}
-          </p>
+          {/* Content Structure */}
+          <div className="flex-1 min-w-0">
+            <div className="flex items-start justify-between gap-2">
+              <h4 className="text-xs sm:text-sm font-black text-[#1C1E1B] truncate">
+                {task.title}
+              </h4>
+              <span
+                className={`text-[10px] sm:text-xs px-2 py-0.5 rounded-full capitalize ${getStatusColor(
+                  task.status
+                )} flex-shrink-0 whitespace-nowrap`}
+              >
+                {task.status || "open"}
+              </span>
+            </div>
 
-          <div className="flex items-center flex-wrap gap-1.5 sm:gap-3 mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-[#5A5E5A]">
-            <span className="flex items-center gap-1">
-              <FolderOpen className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-              {task.category}
-            </span>
-            <span className="hidden xs:inline-flex items-center gap-1">
-              <DollarSign className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-              {formatCurrency(task.budget)}
-            </span>
-            <span className="flex items-center gap-1">
-              <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
-              {formatDate(task.dueDate)}
-            </span>
+            <p className="text-[10px] sm:text-xs text-zinc-400 mt-0.5 truncate font-medium">
+              {task.client_email}
+            </p>
+
+            <div className="flex items-center flex-wrap gap-1.5 sm:gap-3 mt-1.5 sm:mt-2 text-[10px] sm:text-xs text-[#5A5E5A] font-semibold">
+              <span className="flex items-center gap-1">
+                <FolderOpen className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-zinc-400" />
+                {task.category || "General Requirement"}
+              </span>
+              <span className="inline-flex items-center gap-0.5 text-[#4E654C]">
+                <DollarSign className="w-2.5 h-2.5 sm:w-3 sm:h-3" />
+                {formatCurrency(task.budget)}
+              </span>
+              <span className="flex items-center gap-1">
+                <Calendar className="w-2.5 h-2.5 sm:w-3 sm:h-3 text-zinc-400" />
+                {formatDate(task.deadline)}
+              </span>
+            </div>
+
+            <div className="mt-3 pt-2.5 border-t border-zinc-100 flex justify-end">
+              <Link
+                href={`/tasks/${taskId}`}
+                className="text-[10px] uppercase font-bold tracking-wider text-[#1C1E1B] flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
+              >
+                View Task{" "}
+                <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />
+              </Link>
+            </div>
           </div>
         </div>
+      </motion.div>
+    );
+  };
+
+  if (loading) {
+    return (
+      <div className="w-full py-24 bg-[#F4EFEA] flex justify-center items-center text-zinc-400 font-medium text-sm">
+        Loading latest active opportunities...
       </div>
-    </motion.div>
-  );
+    );
+  }
 
   return (
     <section className="py-12 sm:py-16 lg:py-24 bg-[#F4EFEA]">
@@ -176,20 +173,19 @@ const LatestTasksSection = () => {
           viewport={{ once: true }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
         >
-          <span className="inline-block text-xs sm:text-sm font-medium text-[#5A5E5A] bg-white/50 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full mb-2 sm:mb-3">
+          <span className="inline-block text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4E654C] bg-white px-3 sm:px-4 py-1 sm:py-1.5 rounded-full mb-2 sm:mb-3 shadow-sm border border-[#E6DDD4]/40">
             Latest Opportunities
           </span>
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1C1E1B] mb-2 sm:mb-3">
+          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#1C1E1B] mb-2 sm:mb-3 tracking-tight">
             Featured Tasks
           </h2>
-          <p className="text-sm sm:text-base lg:text-lg text-[#5A5E5A]">
+          <p className="text-sm sm:text-base text-zinc-500 font-medium">
             Discover the latest open tasks from your database collection
           </p>
         </motion.div>
 
-        {/* Mobile Layout (< 768px): Single column stacked */}
+        {/* Mobile Layout (< 768px) */}
         <div className="block lg:hidden space-y-4 mb-8">
-          {/* Center Image - Mobile */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -206,120 +202,69 @@ const LatestTasksSection = () => {
                   className="object-cover"
                   priority
                 />
-
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C1E1B]/90 via-[#1C1E1B]/40 to-[#1C1E1B]/10" />
-
                 <div className="absolute inset-0 flex items-center justify-center p-4 sm:p-6">
                   <div className="text-center text-[#F4EFEA]">
                     <div className="w-12 h-12 sm:w-16 sm:h-16 bg-[#F4EFEA]/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-2 sm:mb-3 border border-[#F4EFEA]/10">
                       <Briefcase className="w-6 h-6 sm:w-8 sm:h-8" />
                     </div>
-                    <h3 className="text-base sm:text-lg font-semibold drop-shadow-lg">
+                    <h3 className="text-base sm:text-lg font-bold drop-shadow-lg">
                       Live Tasks
                     </h3>
-                    <p className="text-xs sm:text-sm text-[#F4EFEA]/80 drop-shadow-lg">
-                      6 Open Positions
+                    <p className="text-xs sm:text-sm text-[#F4EFEA]/80 font-medium">
+                      Available Now
                     </p>
-                    <div className="mt-3 sm:mt-4 flex justify-center gap-2 sm:gap-3">
-                      <span className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 bg-[#1C1E1B]/60 backdrop-blur-sm border border-[#F4EFEA]/10 rounded-full">
-                        New
-                      </span>
-                      <span className="text-[10px] sm:text-xs px-2 sm:px-3 py-1 bg-[#1C1E1B]/60 backdrop-blur-sm border border-[#F4EFEA]/10 rounded-full">
-                        Urgent
-                      </span>
-                    </div>
                   </div>
                 </div>
-
-                <div className="absolute top-3 right-3 sm:top-4 sm:right-4 w-8 h-8 sm:w-12 sm:h-12 border border-[#F4EFEA]/15 rounded-full" />
-                <div className="absolute bottom-3 left-3 sm:bottom-4 sm:left-4 w-6 h-6 sm:w-8 sm:h-8 border border-[#F4EFEA]/10 rounded-full" />
               </div>
             </div>
           </motion.div>
 
-          {/* All Tasks Stacked */}
           {allTasks.map((task, index) => (
-            <TaskCard key={task.id} task={task} delay={index * 0.1} />
+            <TaskCard
+              key={task._id?.$oid || task._id}
+              task={task}
+              delay={index * 0.1}
+            />
           ))}
         </div>
 
-        {/* Tablet Layout (768px - 1024px): Two columns with smaller center image */}
+        {/* Tablet Layout (768px - 1024px) */}
         <div className="hidden md:block lg:hidden">
           <div className="grid md:grid-cols-2 gap-6 mb-8">
-            {/* Left Tasks */}
             <div className="space-y-4">
               {leftTasks.map((task, index) => (
-                <TaskCard key={task.id} task={task} delay={index * 0.1} />
+                <TaskCard
+                  key={task._id?.$oid || task._id}
+                  task={task}
+                  delay={index * 0.1}
+                />
               ))}
             </div>
-
-            {/* Right Tasks */}
             <div className="space-y-4">
               {rightTasks.map((task, index) => (
-                <TaskCard key={task.id} task={task} delay={index * 0.1 + 0.3} />
+                <TaskCard
+                  key={task._id?.$oid || task._id}
+                  task={task}
+                  delay={index * 0.1 + 0.3}
+                />
               ))}
             </div>
           </div>
-
-          {/* Center Image - Tablet */}
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="flex justify-center"
-          >
-            <div className="relative w-[300px] h-[300px]">
-              <div className="absolute inset-0 rounded-3xl shadow-xl overflow-hidden">
-                <Image
-                  src="https://images.unsplash.com/photo-1522071820081-009f0129c71c?w=400&h=400&fit=crop&crop=center"
-                  alt="Team collaboration at work"
-                  fill
-                  className="object-cover"
-                  priority
-                />
-
-                <div className="absolute inset-0 bg-gradient-to-t from-[#1C1E1B]/90 via-[#1C1E1B]/40 to-[#1C1E1B]/10" />
-
-                <div className="absolute inset-0 flex items-center justify-center p-6">
-                  <div className="text-center text-[#F4EFEA]">
-                    <div className="w-14 h-14 bg-[#F4EFEA]/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3 border border-[#F4EFEA]/10">
-                      <Briefcase className="w-7 h-7" />
-                    </div>
-                    <h3 className="text-base font-semibold drop-shadow-lg">
-                      Live Tasks
-                    </h3>
-                    <p className="text-sm text-[#F4EFEA]/80 drop-shadow-lg">
-                      6 Open Positions
-                    </p>
-                    <div className="mt-4 flex justify-center gap-3">
-                      <span className="text-xs px-3 py-1 bg-[#1C1E1B]/60 backdrop-blur-sm border border-[#F4EFEA]/10 rounded-full">
-                        New
-                      </span>
-                      <span className="text-xs px-3 py-1 bg-[#1C1E1B]/60 backdrop-blur-sm border border-[#F4EFEA]/10 rounded-full">
-                        Urgent
-                      </span>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="absolute top-4 right-4 w-10 h-10 border border-[#F4EFEA]/15 rounded-full" />
-                <div className="absolute bottom-4 left-4 w-7 h-7 border border-[#F4EFEA]/10 rounded-full" />
-              </div>
-            </div>
-          </motion.div>
         </div>
 
-        {/* Desktop Layout (≥ 1024px): Original split layout with center image */}
+        {/* Desktop Layout (≥ 1024px) */}
         <div className="hidden lg:grid lg:grid-cols-5 gap-6 items-center">
-          {/* Left Column - Tasks */}
           <div className="lg:col-span-2 space-y-4">
             {leftTasks.map((task, index) => (
-              <TaskCard key={task.id} task={task} delay={index * 0.1} />
+              <TaskCard
+                key={task._id?.$oid || task._id}
+                task={task}
+                delay={index * 0.1}
+              />
             ))}
           </div>
 
-          {/* Center - Image */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             whileInView={{ opacity: 1, scale: 1 }}
@@ -336,46 +281,36 @@ const LatestTasksSection = () => {
                   className="object-cover"
                   priority
                 />
-
                 <div className="absolute inset-0 bg-gradient-to-t from-[#1C1E1B]/90 via-[#1C1E1B]/40 to-[#1C1E1B]/10" />
-
                 <div className="absolute inset-0 flex items-center justify-center p-6">
                   <div className="text-center text-[#F4EFEA]">
                     <div className="w-16 h-16 bg-[#F4EFEA]/20 backdrop-blur-sm rounded-full flex items-center justify-center mx-auto mb-3 border border-[#F4EFEA]/10">
                       <Briefcase className="w-8 h-8" />
                     </div>
-                    <h3 className="text-lg font-semibold drop-shadow-lg">
-                      Live Tasks
+                    <h3 className="text-lg font-black drop-shadow-lg">
+                      Live Board
                     </h3>
-                    <p className="text-sm text-[#F4EFEA]/80 drop-shadow-lg">
-                      6 Open Positions
+                    <p className="text-sm text-[#F4EFEA]/80 font-medium drop-shadow-lg">
+                      Active Projects
                     </p>
-                    <div className="mt-4 flex justify-center gap-3">
-                      <span className="text-xs px-3 py-1 bg-[#1C1E1B]/60 backdrop-blur-sm border border-[#F4EFEA]/10 rounded-full">
-                        New
-                      </span>
-                      <span className="text-xs px-3 py-1 bg-[#1C1E1B]/60 backdrop-blur-sm border border-[#F4EFEA]/10 rounded-full">
-                        Urgent
-                      </span>
-                    </div>
                   </div>
                 </div>
-
-                <div className="absolute top-4 right-4 w-12 h-12 border border-[#F4EFEA]/15 rounded-full" />
-                <div className="absolute bottom-4 left-4 w-8 h-8 border border-[#F4EFEA]/10 rounded-full" />
               </div>
             </div>
           </motion.div>
 
-          {/* Right Column - Tasks */}
           <div className="lg:col-span-2 space-y-4">
             {rightTasks.map((task, index) => (
-              <TaskCard key={task.id} task={task} delay={index * 0.1 + 0.3} />
+              <TaskCard
+                key={task._id?.$oid || task._id}
+                task={task}
+                delay={index * 0.1 + 0.3}
+              />
             ))}
           </div>
         </div>
 
-        {/* View All Button */}
+        {/* View All Redirection Action */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -385,10 +320,10 @@ const LatestTasksSection = () => {
         >
           <Link
             href="/tasks"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#1C1E1B] text-[#F4EFEA] text-sm sm:text-base font-medium rounded-full hover:bg-[#2A2D2A] transition-all hover:scale-105 shadow-lg"
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#1C1E1B] text-[#F4EFEA] text-sm font-bold uppercase tracking-wider rounded-full hover:bg-zinc-800 transition-all hover:scale-105 shadow-sm"
           >
             View All Tasks
-            <ArrowRight className="w-3.5 h-3.5 sm:w-4 sm:h-4" />
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </motion.div>
       </div>
