@@ -18,7 +18,7 @@ async function getClientReceivedProposals() {
 
         // Fetch proposals for this specific task
         const proposals = await getProposalByTaskId(taskIdString);
-        console.log(proposals)
+   
 
         // Inject the task title and current status directly into each proposal object
         // so your frontend table component can easily display it!
@@ -44,7 +44,6 @@ async function getClientReceivedProposals() {
 }
 export default async function ManageProposalsPage() {
   const proposals = await getClientReceivedProposals();
-  console.log(proposals)
 
   return (
     <div className="w-full min-h-screen bg-slate-50 p-6 md:p-10 text-slate-800">

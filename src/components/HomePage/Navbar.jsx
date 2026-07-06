@@ -70,7 +70,7 @@ export default function Navbar() {
           </div>
 
           {/* RIGHT: User Action Blocks */}
-          <div className="hidden md:flex items-center justify-end space-x-4 lg:space-x-2 min-w-0">
+          <div className="hidden md:flex items-center justify-end space-x-4 lg:space-x-6 min-w-0">
             {user && (
               <>
                 <Link

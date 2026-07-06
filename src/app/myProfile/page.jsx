@@ -21,7 +21,6 @@ import { getUserSession } from "@/lib/core/session";
 export default async function MyProfilePage() {
   // 🔐 Fetch the current user session
   const user = await getUserSession();
-
   // Redirect to unauthorized route if no user is actively authenticated
   if (!user) {
     redirect("/unauthorized");

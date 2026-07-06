@@ -1,5 +1,12 @@
 import { DashboardSidebar } from "@/components/dashboard/DashboardSidebar";
 
+export const metadata = {
+  title: "Skillswap Dashboard",
+  description: "Freelance micro-task marketplace",
+};
+
+
+
 const DashboardLayout = ({ children }) => {
   return (
     // Applied base theme background and smooth 

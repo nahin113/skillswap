@@ -41,8 +41,8 @@ export default function ActiveProjectsClient({ activeList, completedList }) {
         deliverable_url: deliverableUrl,
       });
 
-      if(res.acknowledged) {
-        toast.success("Submitted Successfully")
+      if (res.acknowledged) {
+        toast.success("Submitted Successfully");
       }
 
       // Optimistically move record from active stream to completed dock
@@ -241,7 +241,7 @@ export default function ActiveProjectsClient({ activeList, completedList }) {
                   name="deliverable_url"
                   type="url"
                   required
-                  placeholder="https://github.com/... or https://docs.google.com/..."
+                  defaultValue="https://github.com/... or https://docs.google.com/..."
                   className="w-full text-sm bg-zinc-50 border border-[#E6DDD4] rounded-xl px-4 py-2.5 text-[#1C1E1B] focus:outline-none focus:border-[#4E654C] focus:bg-white font-medium"
                 />
               </div>

@@ -7,7 +7,7 @@ import TaskFilters from "./TaskFilters";
 import TaskCard from "./TaskCard";
 
 export default function TaskListingContainer({ tasks, filters, total }) {
-  const [searchQuery, setSearchQuery] = useState(filters.search);
+  const [searchQuery, setSearchQuery] = useState(filters.search || "");
   const [selectedCategory, setSelectedCategory] = useState(
     filters.category || "all"
   );
@@ -60,7 +60,6 @@ export default function TaskListingContainer({ tasks, filters, total }) {
       sp.set("page", page);
     }
 
-    console.log("search params", sp.toString());
 
     const path = `?${sp.toString()}`;
     router.push(path, {scroll : false});

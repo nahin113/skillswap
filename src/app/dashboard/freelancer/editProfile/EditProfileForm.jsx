@@ -13,6 +13,7 @@ import {
 } from "lucide-react";
 import { toast } from "react-toastify";
 import { updateFreelancer } from "@/lib/actions/users";
+import { authClient } from "@/lib/auth-client";
 
 const SUGGESTED_SKILLS = [
   "React",
@@ -70,8 +71,10 @@ export default function EditProfileForm({ initialUser }) {
       ...updatedFields,
       skills,
     };
-    const res = await updateFreelancer(user._id, updatedPayload);
-    console.log(res);
+    
+   
+    const res = await updateFreelancer(user?._id, updatedPayload);
+
     if (res.acknowledged) {
       setUser(updatedPayload);
       toast.success("Profile updated successfully!");
@@ -92,7 +95,7 @@ export default function EditProfileForm({ initialUser }) {
             name="name"
             type="text"
             required
-            placeholder={user.name}
+            defaultValue={user.name}
             className="w-full text-sm bg-zinc-50 border border-[#E6DDD4] rounded-xl px-4 py-2.5 text-[#1C1E1B] focus:outline-none focus:border-[#4E654C] focus:bg-white font-medium"
           />
         </div>
@@ -105,7 +108,7 @@ export default function EditProfileForm({ initialUser }) {
             name="image"
             type="url"
             required
-            placeholder={user.image}
+            defaultValue={user.image}
             className="w-full text-sm bg-zinc-50 border border-[#E6DDD4] rounded-xl px-4 py-2.5 text-[#1C1E1B] focus:outline-none focus:border-[#4E654C] focus:bg-white text-xs font-mono"
           />
         </div>
@@ -122,7 +125,7 @@ export default function EditProfileForm({ initialUser }) {
             type="number"
             min="1"
             required
-            placeholder={user.rate}
+            defaultValue={user.rate}
             className="w-full text-sm bg-zinc-50 border border-[#E6DDD4] rounded-xl px-4 py-2.5 text-[#1C1E1B] focus:outline-none focus:border-[#4E654C] focus:bg-white font-bold"
           />
         </div>
@@ -207,7 +210,7 @@ export default function EditProfileForm({ initialUser }) {
           name="bio"
           required
           rows={4}
-          placeholder={user.bio}
+          defaultValue={user.bio}
           className="w-full text-sm bg-zinc-50 border border-[#E6DDD4] rounded-xl px-4 py-2.5 text-[#1C1E1B] focus:outline-none focus:border-[#4E654C] focus:bg-white font-medium resize-none leading-relaxed"
         />
       </div>

@@ -20,8 +20,6 @@ export async function POST(request) {
     const freelancerEmail = formData.get("freelancer_email");
     const clientEmail = formData.get("client_email");
 
-    console.log(freelancerEmail, clientEmail)
-
     if (!taskId || !proposalId || !amount) {
       return NextResponse.json(
         { error: "Missing essential transaction metadata tokens." },

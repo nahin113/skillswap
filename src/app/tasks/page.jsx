@@ -11,7 +11,6 @@ export default async function Page({ searchParams }) {
   const querySearch = new URLSearchParams(filters);
   const queryString = querySearch.toString();
 
-  console.log("search Q", filters, queryString);
 
   // Fetched server-side on the initial request
 const responseData = await getTasks(queryString);
@@ -19,7 +18,6 @@ const responseData = await getTasks(queryString);
 // Safe fallback normalization in case pagination params were stripped out
 const tasks = responseData?.tasks || (Array.isArray(responseData) ? responseData : []);
 const total = responseData?.total || tasks.length;
-console.log(tasks,total)
 
   return (
     <div className="w-full min-h-screen bg-[#F4EFEA] p-6 md:p-12 text-[#1C1E1B]">

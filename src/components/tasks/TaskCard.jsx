@@ -76,8 +76,6 @@ export default function TaskCard({ task }) {
         <Link
           href={`/tasks/${taskId}`}
           className="group flex justify-start items-center gap-2 bg-transparent hover:bg-zinc-50 p-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[#1C1E1B] transition-all duration-200"
-          variant="light"
-          disableRipple
         >
           View Details
           <ArrowRight className="group-hover:translate-x-1 text-[#4E654C] w-4 h-4 transition-transform duration-200" />

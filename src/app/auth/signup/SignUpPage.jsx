@@ -16,7 +16,7 @@ import {
   Plus,
 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import { Input} from "@heroui/react";
+import { Input } from "@heroui/react";
 import { toast } from "react-toastify";
 
 // Sample skillset bank for matching suggestions
@@ -396,7 +396,7 @@ export default function SignUpPage() {
             <p className="text-xs text-zinc-400">
               Already have an account?{" "}
               <Link
-                href={`/auth/sign-in?redirect=${redirectTo}`}
+                href={`/auth/signin`}
                 className="text-[#F4EFEA] font-bold hover:underline ml-1"
               >
                 Sign in

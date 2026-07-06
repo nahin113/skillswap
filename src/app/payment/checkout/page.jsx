@@ -14,14 +14,6 @@ export default async function CheckoutSummaryPage({ searchParams }) {
     clientEmail,
   } = params;
 
-  console.log(
-    proposalId,
-    taskId,
-    amount,
-    taskTitle,
-    freelancerEmail,
-    clientEmail
-  );
   return (
     <div className="w-full min-h-screen bg-slate-50 flex items-center justify-center p-6 text-slate-800">
       <Card className="w-full max-w-md bg-white border border-slate-200 p-8 rounded-2xl shadow-sm">

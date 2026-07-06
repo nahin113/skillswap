@@ -20,7 +20,7 @@ export default function SignInPage() {
   // STRICT REQUIREMENT CHECK: Role-based destination routing
   const handleRouteRedirect = (role) => {
     if (role === "freelancer" || role === "admin") {
-      router.push("/dashboard");
+      router.push(`/dashboard/${role}`);
     } else {
       router.push("/"); // Clients go to standard Home path routing
     }
@@ -30,11 +30,6 @@ export default function SignInPage() {
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
-    console.log("Authenticating profile credentials through Better Auth:", {
-      email,
-      password,
-    });
 
     try {
       const { data, error } = await authClient.signIn.email({
@@ -51,7 +46,7 @@ export default function SignInPage() {
 
       // Handle successful login
       if (data && data.user) {
-        toast.success("Logged In Successfully")
+        toast.success("Logged In Successfully");
         handleRouteRedirect(data.user.role || "client");
       } else {
         handleRouteRedirect("client");

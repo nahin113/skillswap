@@ -1,11 +1,11 @@
-import { serverFetch } from "../core/server";
+import { dataFetch, serverFetch } from "../core/server";
 
 export const getFreelancersList = async () => {
-  return serverFetch(`api/freelancers`);
+  return dataFetch(`api/freelancers`);
 };
 
 export const getFreelancerDetails = async (id) => {
-  return serverFetch(`api/freelancers/${id}`);
+  return dataFetch(`api/freelancers/${id}`);
 };
 
 export const getEarnings = async (email) => {

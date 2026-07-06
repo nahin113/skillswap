@@ -10,9 +10,9 @@ export default async function ManageTasksPage() {
 
   try {
     const data = await getAllTasks();
-    console.log(data);
+    
     tasks = Array.isArray(data) ? data : data?.tasks || [];
-    console.log(tasks)
+    
   } catch (err) {
     console.error("Error reading platform task records:", err);
     errorMsg =

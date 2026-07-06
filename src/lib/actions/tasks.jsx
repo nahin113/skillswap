@@ -11,7 +11,6 @@ export const postTasks = async (newTasksData) => {
 export const updateTasks = async (id, data) => {
   const result = serverMutation(`api/tasks/${id}`, data, "PATCH");
   revalidatePath("/dashbaord/client/myTasks");
-  console.log(result)
   return result;
 };
 

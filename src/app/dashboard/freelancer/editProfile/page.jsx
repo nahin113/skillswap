@@ -7,10 +7,9 @@ export const dynamic = "force-dynamic";
 export default async function EditProfilePage() {
   // 🔌 Fetch current user data from your data engine
   const user = await getUserSession();
-//   console.log(user?.id)
   // For demonstration, replacing with your target structure:
   const freelancerUser = {
-    _id: user?.id,
+    _id: user?._id,
     name: user?.name,
     email: user?.email,
     image: user?.image,

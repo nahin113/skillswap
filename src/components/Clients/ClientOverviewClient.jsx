@@ -14,7 +14,6 @@ export default function ClientOverviewClient({
   spendingData,
   distribution,
 }) {
-//   console.log(metrics, spendingData, distribution);
   const cardConfigs = [
     {
       label: "Total Tasks",
@@ -107,7 +106,7 @@ export default function ClientOverviewClient({
                 const calculatedHeight =
                   maxSpent > 0 ? (spentAmount / maxSpent) * 100 : 0;
                   
-                console.log(idx, " : ", typeof spentAmount,typeof calculatedHeight)
+
 
                 // If amount is greater than 0, give it a base height so it physically shows up
                 const barHeight =

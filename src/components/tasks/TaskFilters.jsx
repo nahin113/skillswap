@@ -24,9 +24,9 @@ export default function TaskFilters({
                 <Magnifier className="w-4 h-4" />
               </InputGroup.Prefix>
               <InputGroup.Input
-                value={searchQuery}
+                value={searchQuery || ""}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Title, description or keywords..."
+                placeholder="Search for Task Titles"
                 className="bg-transparent text-[#1C1E1B] placeholder-zinc-400 font-medium text-sm py-2.5 px-3 outline-none w-full"
               />
             </InputGroup>

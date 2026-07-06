@@ -76,7 +76,7 @@ const handleAcceptRedirect = (proposal) => {
             {proposals.length > 0 ? (
               proposals.map((proposal) => {
                 const proposalId = proposal._id?.toString() || proposal.id;
-                console.log(proposalId)
+  
                 const isCurrentTaskLocked = acceptedTaskIds.includes(
                   proposal.task_id
                 );

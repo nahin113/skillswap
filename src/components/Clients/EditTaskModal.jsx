@@ -30,7 +30,7 @@ export default function EditTaskModal({
         ...updatedFields,
       };
 
-      console.log("Sending Modified Object Payload:", updatedPayload);
+  
 
       const res = await updateTasks(task._id, updatedPayload);
       onSaveSuccess(updatedPayload);

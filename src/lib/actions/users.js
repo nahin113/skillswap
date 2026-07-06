@@ -49,6 +49,6 @@ export const updateUserStatus = async (userId, status) => {
 export const updateFreelancer = async (id, data) => {
   const result = serverMutation(`api/user/${id}`, data, "PATCH");
   revalidatePath("/dashboard/freelancer/editProfile");
-  redirect("/myProfile");
+  redirect("/myProfile")
   return result;
 };

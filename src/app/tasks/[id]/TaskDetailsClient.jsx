@@ -9,7 +9,6 @@ import { redirect } from "next/navigation";
 import { toast } from "react-toastify";
 
 export default function TaskDetailsClient({ task }) {
-  // 🔑 AUTHENTICATION CONFIGURATION
   const { data: session } = authClient.useSession();
   const userDetails = session?.user;
   const user = {
@@ -35,6 +34,7 @@ export default function TaskDetailsClient({ task }) {
 
     // Construct backend payload explicitly pairing fixed security properties
     const payload = {
+      task_title : task.title,
       task_id: taskIdString,
       freelancer_email: user.email,
       proposed_budget: formValues.proposed_budget,
@@ -237,7 +237,7 @@ export default function TaskDetailsClient({ task }) {
                         id="proposed_budget"
                         name="proposed_budget"
                         type="number"
-                        placeholder="e.g. 500"
+                        defaultValue="e.g. 500"
                         required
                         className="bg-white border border-[#E6DDD4] focus:border-[#4E654C] text-[#1C1E1B] font-medium rounded-xl pl-8 pr-4 py-2.5 w-full outline-none transition-colors shadow-sm text-sm"
                       />
@@ -255,7 +255,7 @@ export default function TaskDetailsClient({ task }) {
                       id="estimated_days"
                       name="estimated_days"
                       type="number"
-                      placeholder="e.g. 7"
+                      defaultValue="e.g. 7"
                       required
                       className="bg-white border border-[#E6DDD4] focus:border-[#4E654C] text-[#1C1E1B] font-medium rounded-xl px-4 py-2.5 w-full outline-none transition-colors shadow-sm text-sm"
                     />

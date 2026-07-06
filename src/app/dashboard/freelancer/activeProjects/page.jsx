@@ -1,5 +1,5 @@
 import ActiveProjectsClient from "@/components/Freelancers/ActiveProjectsClient";
-import { getTasksByFreelancerEmail } from "@/lib/api/freelancers";  
+import { getTasksByFreelancerEmail } from "@/lib/api/freelancers";
 import { getUserSession } from "@/lib/core/session";
 
 export const dynamic = "force-dynamic";
@@ -8,11 +8,12 @@ export default async function ActiveProjectsPage() {
   let projects = [];
 
   try {
-    const user = await getUserSession()
+    const user = await getUserSession();
     const fetchedData = await getTasksByFreelancerEmail(user?.email);
     projects = Array.isArray(fetchedData)
       ? fetchedData
       : fetchedData?.tasks || [];
+    
   } catch (error) {
     console.error("Failed to compile project ledger streams:", error);
   }
@@ -27,7 +28,6 @@ export default async function ActiveProjectsPage() {
   const completedProjects = projects.filter(
     (p) => p.status?.toLowerCase() === "completed"
   );
-
   return (
     <div className="max-w-5xl mx-auto py-6 space-y-6">
       <div className="border-b border-[#E6DDD4] pb-4">

@@ -2,23 +2,23 @@
 import { redirect } from "next/navigation";
 import { auth } from "../auth";
 import { headers } from "next/headers";
+import { dataFetch } from "./server";
 
 export const getUserSession = async () => {
   const session = await auth.api.getSession({
     headers: await headers(),
   });
-
   // if(session?.user?.banned) return null
-
-  return session?.user || null;
+  const userId = session?.user?.id;
+  return dataFetch(`api/updatedUser/${userId}`);
 };
 
 export const getUserToken = async () => {
-  const session = await auth.api.getSession({
+  const tokenData = await auth.api.getToken({
     headers: await headers(),
   });
 
-  return session?.session?.token || null;
+  return tokenData?.token || null;
 };
 
 export const requireRole = async (role) => {

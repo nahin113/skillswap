@@ -25,17 +25,16 @@ export const serverMutation = async (path, data, method = "POST") => {
   return handleStatusCode(res);
 };
 
-
 export const serverFetch = async (path) => {
-  const res = await fetch(`${baseUrl}${path}`, { 
-    cache: "no-store"
+  const res = await fetch(`${baseUrl}${path}`, {
+    headers: await authHeader(),
   });
   return handleStatusCode(res);
 };
 
-export const protectedFetch = async (path) => {
+export const dataFetch = async (path) => {
   const res = await fetch(`${baseUrl}${path}`, {
-    headers: await authHeader(),
+    cache: "no-store",
   });
 
   return handleStatusCode(res);

@@ -1,17 +1,17 @@
-import { serverFetch } from "../core/server";
+import { dataFetch, serverFetch } from "../core/server";
 
 export const getTasksByemail = async () => {
   return serverFetch(`api/tasks/my-tasks`);
 };
 
 export const getTasks = async (queryString) => {
-  return serverFetch(`api/tasks?${queryString}`);
+  return dataFetch(`api/tasks?${queryString}`);
 };
 export const getAllTasks = async () => {
-  return serverFetch(`api/tasks/all-tasks`);
+  return dataFetch(`api/tasks/all-tasks`);
 };
 
 export const getTaskById = async (taskId) => {
-  return serverFetch(`api/tasks/${taskId}`);
+  return dataFetch(`api/tasks/${taskId}`);
 };
 

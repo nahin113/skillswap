@@ -19,7 +19,6 @@ export default async function FreelancerDetailsPage({ params }) {
   // Await params block to safely read dynamic segments in Next.js
   const {id} = await params;
   const freelancer = await getFreelancerDetails(id);
-  console.log(freelancer)
 
   if (!freelancer) {
     return (
@@ -50,7 +49,6 @@ export default async function FreelancerDetailsPage({ params }) {
     skillsArray = freelancer.skills?.split(",").map((s) => s.trim()) || [];
   }
 
-  console.log("skills array",skillsArray, freelancer.skills)
 
   return (
     <main className="min-h-screen bg-[#F4EFEA] text-[#1C1E1B] relative overflow-hidden">

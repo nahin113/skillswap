@@ -35,10 +35,10 @@ export default function PostTaskPage() {
     };
 
     try {
-      console.log("Ready for Express Backend Submission:", taskPayload);
+    
 
       const res = await postTasks(taskPayload);
-      console.log(res);
+
 
       if (res.acknowledged) {
         e.target.reset();
