@@ -143,7 +143,7 @@ const LatestTasksSection = () => {
             <div className="mt-3 pt-2.5 border-t border-zinc-100 flex justify-end">
               <Link
                 href={`/tasks/${taskId}`}
-                className="text-[10px] uppercase font-bold tracking-wider text-[#1C1E1B] flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
+                className="text-[10px] uppercase font-bold tracking-wider text-[#1C1E1B] hover:text-[#108A00] flex items-center gap-1 opacity-60 group-hover:opacity-100 transition-opacity"
               >
                 View Task{" "}
                 <ArrowRight className="w-3 h-3 group-hover:translate-x-0.5 transition-transform" />

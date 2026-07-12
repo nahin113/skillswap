@@ -1,6 +1,7 @@
 import React from "react";
 import TaskDetailsClient from "./TaskDetailsClient";
 import { getTaskById } from "@/lib/api/tasks";
+import TaskSuggetion from "@/components/tasks/TaskSuggetion";
 
 export const dynamic = "force-dynamic";
 
@@ -22,8 +23,9 @@ export default async function TaskDetailsPage({ params }) {
 
   return (
     <div className="min-h-screen bg-[#F4EFEA] text-[#1C1E1B] p-6 md:p-12">
-      <div className="max-w-5xl mx-auto">
+      <div className="max-w-7xl mx-auto">
         <TaskDetailsClient task={task} />
+        <TaskSuggetion task={task} />
       </div>
     </div>
   );

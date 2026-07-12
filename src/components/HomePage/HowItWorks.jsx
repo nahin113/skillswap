@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import CountUp from "../CountUp";
 
 export default function HowItWorks() {
@@ -46,11 +46,24 @@ export default function HowItWorks() {
 
   const [activeStep, setActiveStep] = useState(1);
 
+  // Custom Mobile Stack state logic tracker
+  const [mobileStack, setMobileStack] = useState(steps);
+
+  const handleMobileCardClick = () => {
+    // React Bitz implementation style: cycle the top card to the back of the stack array
+    setMobileStack((prev) => {
+      const copy = [...prev];
+      const first = copy.shift();
+      if (first) copy.push(first);
+      return copy;
+    });
+  };
+
   return (
-    <section className="w-full bg-[#F4EFEA] py-24 font-sans overflow-hidden border-t border-[#E6DDD4]">
+    <section className="w-full bg-[#F4EFEA] py-16 lg:py-24 font-sans overflow-hidden border-t border-[#E6DDD4]">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Centered Heading */}
-        <div className="text-center max-w-xl mx-auto mb-16 space-y-3">
+        {/* Centered Heading Layout Frame */}
+        <div className="text-center max-w-xl mx-auto mb-12 lg:mb-16 space-y-3">
           <h2 className="text-3xl sm:text-4xl font-black text-[#1C1E1B] tracking-tight">
             How It <span className="text-[#14A800]">Works</span>
           </h2>
@@ -60,11 +73,98 @@ export default function HowItWorks() {
           </p>
         </div>
 
-        {/* 
-          FIX: Replaced min-h- with an explicit fixed height on desktop (lg:h-[480px]), 
-          and forced h-auto on mobile layouts to isolate component geometry.
-        */}
-        <div className="flex flex-col lg:flex-row items-stretch justify-center gap-5 h-auto lg:h-[480px] w-full overflow-hidden">
+        {/* ========================================================================= */}
+        {/* 1. MOBILE REACT-BITZ INSPIRED STACK SYSTEM (Visible below lg break frames) */}
+        {/* ========================================================================= */}
+        <div className="flex lg:hidden flex-col items-center justify-center w-full min-h-[500px] py-4 relative select-none">
+          {/* Card Stack Deck Canvas container */}
+          <div className="relative w-full max-w-[340px] h-[440px] flex items-center justify-center">
+            <AnimatePresence mode="popLayout">
+              {mobileStack.map((step, index) => {
+                // Stack layout index calculations
+                const isTopCard = index === 0;
+
+                return (
+                  <motion.div
+                    key={step.id}
+                    style={{
+                      transformOrigin: "bottom center",
+                      zIndex: mobileStack.length - index,
+                    }}
+                    animate={{
+                      y: index * -12, // Stack cascading offsets
+                      scale: 1 - index * 0.04,
+                      opacity: index > 2 ? 0 : 1,
+                    }}
+                    exit={{
+                      x: 240,
+                      opacity: 0,
+                      scale: 0.9,
+                      rotate: 10,
+                      transition: { duration: 0.35, ease: "easeInOut" },
+                    }}
+                    onClick={isTopCard ? handleMobileCardClick : undefined}
+                    className={`absolute inset-0 w-full h-full rounded-[2rem] border border-[#E6DDD4] bg-white p-6 shadow-xl flex flex-col justify-between overflow-hidden ${
+                      isTopCard
+                        ? "cursor-pointer active:scale-98 transition-transform"
+                        : "pointer-events-none"
+                    }`}
+                  >
+                    {/* Media Card Preview Background Track */}
+                    <div className="w-full h-36 relative rounded-2xl overflow-hidden border border-[#E6DDD4] shrink-0">
+                      <img
+                        src={step.bgImage}
+                        alt={step.title}
+                        className="w-full h-full object-cover"
+                      />
+                      <div className="absolute top-3 left-3 bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full text-[10px] font-black uppercase tracking-widest text-[#14A800] border border-[#E6DDD4]">
+                        {step.tag}
+                      </div>
+                    </div>
+
+                    {/* Step Text Fields Content */}
+                    <div className="flex-1 flex flex-col justify-center py-2 space-y-2">
+                      <h3 className="text-xl font-black text-[#1C1E1B] tracking-tight">
+                        {step.title}
+                      </h3>
+                      <p className="text-xs text-[#5A5E5A] leading-relaxed line-clamp-3">
+                        {step.description}
+                      </p>
+                    </div>
+
+                    {/* Footer Metrics Panel */}
+                    <div className="flex items-center justify-between border-t border-[#F4EFEA] pt-3 mt-auto">
+                      <div>
+                        <div className="text-lg font-black text-[#1A800] text-[#14A800]">
+                          <CountUp
+                            from={0}
+                            to={step.metricValue}
+                            separator=","
+                            direction="up"
+                            duration={1}
+                            delay={0.1}
+                          />
+                        </div>
+                        <div className="text-[9px] font-bold text-[#949894] uppercase tracking-wider">
+                          {step.metricLabel}
+                        </div>
+                      </div>
+
+                      <div className="text-[10px] font-bold text-zinc-400 bg-zinc-100 px-2.5 py-1 rounded-full">
+                        Next Step &rarr;
+                      </div>
+                    </div>
+                  </motion.div>
+                );
+              })}
+            </AnimatePresence>
+          </div>
+        </div>
+
+        {/* ==================================================================== */}
+        {/* 2. DESKTOP ACCORDION GRID COMPONENT FRAME (Visible above lg viewports) */}
+        {/* ==================================================================== */}
+        <div className="hidden lg:flex flex-col lg:flex-row items-stretch justify-center gap-5 h-[480px] w-full overflow-hidden">
           {steps.map((step) => {
             const isOpen = activeStep === step.id;
 
@@ -77,13 +177,13 @@ export default function HowItWorks() {
                   duration: 0.75,
                   ease: [0.25, 1, 0.35, 1],
                 }}
-                className={`group relative rounded-[2.5rem] border border-[#E6DDD4] overflow-hidden flex flex-col justify-between shadow-sm transition-all duration-500 h-auto lg:h-full ${
+                className={`group relative rounded-[2.5rem] border border-[#E6DDD4] overflow-hidden flex flex-col justify-between shadow-sm transition-all duration-500 h-full ${
                   isOpen
                     ? "flex-[3.5] bg-white p-8 md:p-10 shadow-md border-zinc-300"
-                    : "flex-[0.5] bg-[#E6DDD4]/30 hover:bg-[#E6DDD4]/70 hover:border-zinc-400 p-6 items-center justify-center min-w-[85px] hidden lg:flex"
+                    : "flex-[0.5] bg-[#E6DDD4]/30 hover:bg-[#E6DDD4]/70 hover:border-zinc-400 p-6 items-center justify-center min-w-[85px] flex"
                 }`}
               >
-                {/* --- 1. FULL VIEW DISPLAY (When card is hovered/expanded) --- */}
+                {/* --- FULL OPEN CARD LAYOUT --- */}
                 {isOpen && (
                   <motion.div
                     initial={{ opacity: 0, x: -10 }}
@@ -91,7 +191,6 @@ export default function HowItWorks() {
                     transition={{ delay: 0.2, duration: 0.5, ease: "easeOut" }}
                     className="h-full flex flex-col md:flex-row gap-8 items-center w-full overflow-hidden"
                   >
-                    {/* Left Frame Content */}
                     <div className="flex-1 flex flex-col justify-between h-full py-2 space-y-6">
                       <div className="space-y-3">
                         <span className="text-xs font-bold uppercase tracking-widest text-[#14A800]">
@@ -105,7 +204,6 @@ export default function HowItWorks() {
                         </p>
                       </div>
 
-                      {/* Pill Mini Badge and Action Tracker */}
                       <div className="flex items-center gap-4 bg-[#F4EFEA] border border-[#E6DDD4] rounded-2xl p-4 w-fit shrink-0">
                         <div>
                           <div className="text-xl font-black text-[#1C1E1B]">
@@ -126,7 +224,6 @@ export default function HowItWorks() {
                       </div>
                     </div>
 
-                    {/* Right Frame Content: Media Card */}
                     <div className="w-full md:w-[48%] h-48 md:h-full relative rounded-3xl overflow-hidden border border-[#E6DDD4] shadow-inner shrink-0">
                       <img
                         src={step.bgImage}
@@ -138,7 +235,7 @@ export default function HowItWorks() {
                   </motion.div>
                 )}
 
-                {/* --- 2. COMPRESSED VERTICAL TAB VIEW (When closed on Desktop) --- */}
+                {/* --- CLOSED VERTICAL ACCORDION TAB LAYOUT --- */}
                 {!isOpen && (
                   <motion.div
                     initial={{ opacity: 0 }}
@@ -151,7 +248,6 @@ export default function HowItWorks() {
                       {step.id}
                     </div>
 
-                    {/* Rotated text layout */}
                     <p className="text-sm font-black text-[#1C1E1B] group-hover:text-black tracking-tight whitespace-nowrap rotate-90 my-20 origin-center transition-colors duration-300">
                       {step.shortTitle}
                     </p>
@@ -159,23 +255,6 @@ export default function HowItWorks() {
                     <div className="w-2 h-2 rounded-full bg-[#1C1E1B]/30 group-hover:bg-[#14A800]/60 transition-colors duration-300" />
                   </motion.div>
                 )}
-
-                {/* --- 3. MOBILE FALLBACK LAYOUT (Stacked rows triggerable on tap below lg viewport) --- */}
-                <div className="lg:hidden block w-full">
-                  {!isOpen && (
-                    <div
-                      className="flex items-center justify-between py-3 px-1"
-                      onClick={() => setActiveStep(step.id)}
-                    >
-                      <span className="font-extrabold text-[#1C1E1B]">
-                        {step.shortTitle}
-                      </span>
-                      <span className="text-xs text-[#14A800] font-bold tracking-wide uppercase">
-                        View Step
-                      </span>
-                    </div>
-                  )}
-                </div>
               </motion.div>
             );
           })}

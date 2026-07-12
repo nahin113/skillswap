@@ -8,9 +8,7 @@ import { ScrollReveal } from "@/components/ScrollReveal";
 export default function Home() {
   return (
     <div className="bg-[#F4EFEA]">
-      <ScrollReveal direction="up" delay={0.2}>
-        <HeroSection />
-      </ScrollReveal>
+      <HeroSection />
       <ScrollReveal direction="up" delay={0.2}>
         <LatestTasksSection />
       </ScrollReveal>

@@ -43,9 +43,7 @@ export default function RootLayout({ children }) {
           />
           {children}
         </main>
-        <ScrollReveal direction="up" delay={0.2}>
-          <Footer />
-        </ScrollReveal>
+        <Footer />
       </body>
     </html>
   );

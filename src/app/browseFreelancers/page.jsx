@@ -7,7 +7,7 @@ export default async function FreelancersPage() {
 
   return (
     <div className="min-h-screen bg-[#F4EFEA] p-6 sm:p-10 text-[#1C1E1B]">
-      <div className="max-w-7xl mx-auto space-y-10">
+      <div className="container mx-auto space-y-10">
         {/* Dynamic Headings Banner */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-b border-[#E6DDD4] pb-8">
           <div>
@@ -35,7 +35,7 @@ export default async function FreelancersPage() {
             </p>
           </div>
         ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-7">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-7">
             {data.map((freelancer) => (
               <FreelancerCard key={freelancer._id} freelancer={freelancer} />
             ))}

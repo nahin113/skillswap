@@ -74,13 +74,13 @@ export default function TaskListingContainer({ tasks, filters, total }) {
         setSelectedCategory={setSelectedCategory}
       />
 
-      <div className="max-w-7xl mx-auto mb-6 text-sm font-medium text-zinc-500 px-2">
+      <div className="container mx-auto mb-6 text-sm font-medium text-zinc-500 px-2">
         Showing {tasks.length} position{tasks.length !== 1 && "s"}
       </div>
 
       {tasks.length > 0 ? (
         <>
-          <div className="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 justify-items-center">
+          <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 justify-items-center">
             {tasks.map((taskItem) => (
               <TaskCard
                 key={taskItem._id?.$oid || taskItem._id}
@@ -142,7 +142,7 @@ export default function TaskListingContainer({ tasks, filters, total }) {
           </Pagination>
         </>
       ) : (
-        <div className="text-center py-20 bg-white border border-[#E6DDD4] rounded-[32px] max-w-7xl mx-auto shadow-sm">
+        <div className="text-center py-20 bg-white border border-[#E6DDD4] rounded-[32px] container mx-auto shadow-sm">
           <p className="text-zinc-400 text-sm font-medium">
             No positions match your search criteria.
           </p>

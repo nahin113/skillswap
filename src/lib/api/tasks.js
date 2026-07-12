@@ -15,3 +15,7 @@ export const getTaskById = async (taskId) => {
   return dataFetch(`api/tasks/${taskId}`);
 };
 
+export const getTaskByCategory = async (encodedCategory) => {
+  return dataFetch(`api/tasksByCategory?category=${encodedCategory}`);
+};
+

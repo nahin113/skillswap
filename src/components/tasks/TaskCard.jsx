@@ -2,85 +2,123 @@
 
 import React from "react";
 import { Card, Link } from "@heroui/react";
-import { MapPin, Calendar, CircleDollar, ArrowRight } from "@gravity-ui/icons";
+import { Calendar, CircleDollar, ArrowRight } from "@gravity-ui/icons";
 
 export default function TaskCard({ task }) {
   // Guard clause in case the prop isn't passed or is loading
   if (!task) return null;
 
-  // 🔒 FIX: Safely parse MongoDB BSON ObjectIDs, Hydrated Strings, or Meta $oids explicitly
+  // 🔒 Safely parse MongoDB BSON ObjectIDs, Hydrated Strings, or Meta $oids explicitly
   const taskId =
     task.id || (task._id?.$oid ? task._id.$oid : task._id?.toString());
 
   // Render a fallback string if client data payload attributes are empty
   const clientName = task.client_email || "Platform Client";
 
+  const statusConfig = {
+    "open": {
+      bg: "bg-[#14A800]", // Brand Vibrant Green
+      text: "text-white",
+      label: "Open",
+    },
+    "In Progress": {
+      bg: "bg-amber-500", // Smooth Pending Warning Amber
+      text: "text-white",
+      label: "In Progress",
+    },
+    "completed": {
+      bg: "bg-[#1C1E1B]", // Premium Deep Charcoal Tone
+      text: "text-[#F4EFEA]",
+      label: "Completed",
+    },
+  };
+
+  // Resolve current task status layout styles seamlessly
+  const currentStatus = statusConfig[task.status] || statusConfig.open;
+
   return (
-    <Card className="p-6 w-full max-w-[440px] border border-[#E6DDD4] bg-white text-[#1C1E1B] rounded-[32px] shadow-sm hover:shadow-md hover:scale-[1.01] transition-all duration-200">
-      {/* Card Header: Client Info & Task Title */}
-      <Card.Header className="flex flex-col items-start gap-3 p-0 pb-3">
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-[#4E654C]/10 border border-[#4E654C]/30 flex items-center justify-center text-[10px] text-[#4E654C] font-bold uppercase">
-            {clientName.charAt(0)}
+    <Card className="group relative w-full border border-[#E6DDD4] bg-white text-[#1C1E1B] rounded-[24px] p-7 shadow-sm hover:shadow-md transition-all duration-300 overflow-hidden flex flex-col justify-between min-h-[360px]">
+      <div>
+        {/* --- Card Top Header Block --- */}
+        <div className="flex flex-col gap-2.5 items-start">
+          <h3 className="text-2xl font-black tracking-tight text-[#1C1E1B] leading-tight line-clamp-2 group-hover:text-[#14A800] transition-colors duration-200">
+            {task.title}
+          </h3>
+
+          <div className="flex items-center gap-3">
+            {/* Context-aware Application Status Pill */}
+            <span
+              className={`text-[10px] font-black uppercase tracking-wider px-2.5 py-1 rounded-full ${currentStatus.bg} ${currentStatus.text}`}
+            >
+              {currentStatus.label}
+            </span>
+            <span className="text-xs text-zinc-400 font-medium">
+              Posted by {clientName}
+            </span>
           </div>
-          <span className="text-sm font-medium text-zinc-500">
-            {clientName}
-          </span>
         </div>
 
-        <Card.Title className="text-2xl font-black tracking-tight text-[#1C1E1B] leading-tight line-clamp-2">
-          {task.title}
-        </Card.Title>
-      </Card.Header>
+        {/* --- Two-Column High-Contrast Metadata Grid --- */}
+        <div className="grid grid-cols-2 gap-4 my-6 py-4 border-y border-[#E6DDD4]/50">
+          {/* Budget Block */}
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-[#F4EFEA] rounded-xl shrink-0">
+              <CircleDollar className="text-[#1C1E1B] w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-base font-black text-[#1C1E1B]">
+                ${task.budget} USD
+              </div>
+              <div className="text-xs text-zinc-500">Fixed Budget</div>
+            </div>
+          </div>
 
-      {/* Card Content: Field Attributes & Meta Descriptors */}
-      <Card.Content className="flex flex-col gap-4 p-0 py-3">
-        {/* Short Text snippet summary field */}
+          {/* Timeline Block */}
+          <div className="flex items-start gap-3">
+            <div className="p-2 bg-[#F4EFEA] rounded-xl shrink-0">
+              <Calendar className="text-zinc-500 w-5 h-5" />
+            </div>
+            <div>
+              <div className="text-sm font-bold text-[#1C1E1B] line-clamp-1">
+                {task.deadline
+                  ? new Date(task.deadline).toLocaleDateString(undefined, {
+                      month: "short",
+                      day: "numeric",
+                    })
+                  : "No Deadline"}
+              </div>
+              <div className="text-xs text-zinc-500">Target Timeline</div>
+            </div>
+          </div>
+        </div>
+
+        {/* --- Main Snippet Description Paragraph --- */}
         {task.description && (
-          <p className="text-sm text-zinc-600 line-clamp-2 leading-relaxed">
+          <p className="text-sm text-zinc-600 line-clamp-3 leading-relaxed mb-6">
             {task.description}
           </p>
         )}
 
-        {/* Dynamic Badge Tag Layout Group */}
-        <div className="flex flex-wrap gap-2 pt-2">
-          {/* Category Tag */}
-          <div className="flex items-center gap-1.5 bg-[#F4EFEA]/80 px-3 py-1.5 rounded-full border border-[#E6DDD4]">
-            <span className="text-xs font-bold text-zinc-600 capitalize">
-              {task.category || "General Work"}
-            </span>
-          </div>
-
-          {/* Budget Tag */}
-          <div className="flex items-center gap-1.5 bg-[#4E654C]/10 px-3 py-1.5 rounded-full border border-[#4E654C]/20 w-fit">
-            <CircleDollar className="text-[#4E654C] w-3.5 h-3.5" />
-            <span className="text-xs font-black text-[#4E654C]">
-              ${task.budget} USD
-            </span>
-          </div>
-
-          {/* Deadline Tag */}
-          <div className="flex items-center gap-1.5 bg-[#F4EFEA]/80 px-3 py-1.5 rounded-full border border-[#E6DDD4]">
-            <Calendar className="text-zinc-400 w-3.5 h-3.5" />
-            <span className="text-xs font-medium text-zinc-600">
-              {task.deadline
-                ? new Date(task.deadline).toLocaleDateString()
-                : "No Deadline"}
-            </span>
+        {/* --- Bottom Attribute Category Pill --- */}
+        <div className="flex flex-wrap gap-2 mb-2">
+          <div className="flex items-center gap-1.5 bg-[#F4EFEA]/60 px-3 py-1.5 rounded-full border border-[#E6DDD4]/80 text-xs font-bold text-zinc-600 capitalize">
+            {task.category || "General Work"}
           </div>
         </div>
-      </Card.Content>
+      </div>
 
-      {/* Card Footer: Detailed Route Click Redirection Link */}
-      <Card.Footer className="p-0 pt-4 border-t border-[#E6DDD4] mt-2">
-        <Link
-          href={`/tasks/${taskId}`}
-          className="group flex justify-start items-center gap-2 bg-transparent hover:bg-zinc-50 p-1.5 rounded-xl text-xs font-bold uppercase tracking-wider text-[#1C1E1B] transition-all duration-200"
-        >
-          View Details
-          <ArrowRight className="group-hover:translate-x-1 text-[#4E654C] w-4 h-4 transition-transform duration-200" />
-        </Link>
-      </Card.Footer>
+      {/* --- Smooth Animated Reveal Action Link Area --- */}
+      <div className="h-12 relative mt-4 flex items-center">
+        <div className="absolute inset-x-0 bottom-0 opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.25,1,0.35,1)]">
+          <Link
+            href={`/tasks/${taskId}`}
+            className="w-full sm:w-fit inline-flex items-center justify-center gap-2 bg-[#14A800] hover:bg-[#118F00] text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm"
+          >
+            View Details
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
     </Card>
   );
 }

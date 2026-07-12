@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import Image from "next/image";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 export default function Testimonials() {
   // Dynamic reviews data matching the cluster personas
@@ -121,7 +122,7 @@ export default function Testimonials() {
           {/* Static Clean Empty Hub Asset to match "View More" element in image */}
           <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-dashed border-[#108A00]/40 flex items-center justify-center bg-white/30 text-center lg:-mt-14 shrink-0">
             <span className="text-[10px] md:text-xs font-bold text-[#4E654C]">
-              Join Us
+              <Link className="no-underline" href='/auth/signup'>Join Us</Link>
             </span>
           </div>
         </div>

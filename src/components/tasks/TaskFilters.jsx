@@ -11,7 +11,7 @@ export default function TaskFilters({
   setSelectedCategory,
 }) {
   return (
-    <div className="flex flex-col gap-4 bg-white p-6 rounded-[24px] border border-[#E6DDD4] max-w-7xl mx-auto mb-10 px-6 shadow-sm">
+    <div className="flex flex-col gap-4 bg-white p-6 rounded-[24px] border border-[#E6DDD4] container mx-auto mb-10 px-6 shadow-sm">
       <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-end">
         {/* 1. Search Text Field - Span 5 columns */}
         <div className="md:col-span-5">

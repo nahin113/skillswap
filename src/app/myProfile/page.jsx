@@ -26,7 +26,6 @@ export default async function MyProfilePage() {
     redirect("/unauthorized");
   }
 
-  // Normalize structural fields from your DB (handling role overrides safely)
   const explicitRole =
     user.role === "admin" ? "admin" : user.accountType || "client";
 
@@ -47,7 +46,7 @@ export default async function MyProfilePage() {
       <div className="absolute bottom-[-10%] left-[-10%] w-[40vw] h-[40vw] bg-zinc-200/40 rounded-full blur-[150px] pointer-events-none" />
 
       {/* Profile Container Canvas Wrapper */}
-      <div className="w-full max-w-7xl mx-auto px-6 sm:px-12 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 relative z-10">
+      <div className="w-full container mx-auto px-6 sm:px-12 py-12 lg:py-20 grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 relative z-10">
         {/* LEFT COMPONENT: Common Profile Base Identity Panel */}
         <div className="lg:col-span-4 space-y-6">
           <div className="bg-white border border-[#E6DDD4] rounded-[2.5rem] p-8 backdrop-blur-xl flex flex-col items-center text-center shadow-sm">
@@ -96,7 +95,7 @@ export default async function MyProfilePage() {
             <div className="w-full border-t border-[#E6DDD4] mt-8 pt-6 space-y-3">
               <button className="w-full bg-[#F4EFEA] border border-[#E6DDD4] hover:bg-zinc-100 text-zinc-700 font-bold py-3 rounded-xl text-xs transition-colors flex items-center justify-center gap-2">
                 <Settings className="w-4 h-4 text-[#4E654C]" />
-                Edit Profile Settings
+                <Link href={user.accountType === 'freelancer' && `/dashboard/freelancer/editProfile`}>Edit Profile Settings</Link>
               </button>
             </div>
           </div>
@@ -227,7 +226,7 @@ export default async function MyProfilePage() {
                 </h2>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   <Link
-                    href="/admin/dashboard"
+                    href="/dashboard/admin"
                     className="bg-white border border-[#E6DDD4] hover:border-red-400 p-6 rounded-2xl flex items-center gap-4 group transition-colors shadow-sm"
                   >
                     <LayoutDashboard className="w-5 h-5 text-red-500" />

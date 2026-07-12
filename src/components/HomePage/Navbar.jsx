@@ -74,7 +74,7 @@ export default function Navbar() {
           </nav>
 
           {/* CENTER: Identity Logo */}
-          <div className="flex justify-start md:absolute md:left-1/2 md:-translate-x-1/2">
+          <div className="flex justify-start md:hidden xl:flex xl:absolute xl:left-1/2 xl:-translate-x-1/2">
             <Link href="/" className="flex items-center">
               <span
                 className={`font-black text-xl tracking-tight uppercase drop-shadow-sm ${
@@ -122,7 +122,7 @@ export default function Navbar() {
                   }`}
                 >
                   <Avatar
-                    className="border-2 border-[#14A800] bg-[#1E1611] text-[#F7F4EF] shrink-0 w-8 h-8 lg:w-9 lg:h-9"
+                    className="border-2 border-[#E6DDD4] bg-[#1E1611] text-[#F7F4EF] shrink-0 w-8 h-8 lg:w-9 lg:h-9"
                     size="sm"
                   >
                     <Avatar.Image

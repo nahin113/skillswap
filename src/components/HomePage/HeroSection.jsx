@@ -158,29 +158,30 @@ const HeroSection = () => {
         {/* 3. STRUCTURAL WRAPPER CONTAINER */}
         <div className="relative z-10 w-full container mx-auto px-4 sm:px-6 lg:px-8 pt-36 flex flex-col items-center">
           {/* Typography Block: Changed text colors to highly visible white/emerald variants */}
-          <div className="text-center max-w-4xl mx-auto mb-16">
+          <div className="text-center max-w-4xl mx-auto mb-16 px-4 flex flex-col items-center">
             <motion.h1
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.1 }}
-              className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.15]"
+              className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.2] sm:leading-[1.15] w-full text-center"
             >
-              <SplitText
-                text="Get your tasks done by"
-                className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.15]"
-                delay={50}
-                duration={1.25}
-                ease="power3.out"
-                splitType="chars"
-                from={{ opacity: 0, y: 40 }}
-                to={{ opacity: 1, y: 0 }}
-                threshold={0.1}
-                rootMargin="-100px"
-                textAlign="center"
-                showCallback
-              />
-              <br className="hidden md:inline" />
-              <span>
+              <span className="block md:inline-block">
+                <SplitText
+                  text="Get your tasks done by "
+                  className="text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold text-white tracking-tight"
+                  delay={50}
+                  duration={1.25}
+                  ease="power3.out"
+                  splitType="chars"
+                  from={{ opacity: 0, y: 40 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0.1}
+                  rootMargin="-100px"
+                  textAlign="center"
+                  showCallback
+                />
+              </span>
+              <span className="block md:inline-block mt-1 sm:mt-2 md:mt-0">
                 <SplitText
                   text="skilled freelancers"
                   className="text-[#108A00]"
@@ -202,7 +203,7 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.2 }}
-              className="mt-6 text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto font-medium drop-shadow-sm"
+              className="w-6/12 sm:w-full mt-6 text-sm sm:text-base md:text-lg text-zinc-300 max-w-2xl mx-auto font-medium drop-shadow-sm px-2 leading-relaxed"
             >
               The seamless, micro-task freelance marketplace engineered for
               swift, verified collaborative workflows. Post a small task or
@@ -213,23 +214,23 @@ const HeroSection = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.6, delay: 0.3 }}
-              className="mt-8 flex flex-wrap items-center justify-center gap-4"
+              className="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4 w-full sm:w-auto px-4 sm:px-0"
             >
               {role === "client" ? (
                 <Link
                   href="/dashboard/client/postTasks"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#108A00] text-white font-bold rounded-full hover:bg-[#14A800] transition-all hover:scale-105 shadow-xl shadow-green-950/20"
+                  className="w-4/12 sm:w-auto text-center inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#108A00] text-white font-bold rounded-full hover:bg-[#14A800] transition-all hover:scale-[1.03] active:scale-95 shadow-xl shadow-green-950/20 text-sm sm:text-base"
                 >
                   Post a Task
-                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  <ArrowRight className="w-4 h-4 stroke-[2.5] shrink-0" />
                 </Link>
               ) : (
                 <Link
                   href="/tasks"
-                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#108A00] text-white font-bold rounded-full hover:bg-[#14A800] transition-all hover:scale-105 shadow-xl shadow-green-950/20"
+                  className="w-4/12 sm:w-auto text-center inline-flex items-center justify-center gap-2 px-8 py-4 bg-[#108A00] text-white font-bold rounded-full hover:bg-[#14A800] transition-all hover:scale-[1.03] active:scale-95 shadow-xl shadow-green-950/20 text-sm sm:text-base"
                 >
                   Browse Tasks
-                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                  <ArrowRight className="w-4 h-4 stroke-[2.5] shrink-0" />
                 </Link>
               )}
             </motion.div>
@@ -310,8 +311,7 @@ const HeroSection = () => {
           </div>
         </div>
       </div>
-      <div>
-      </div>
+      <div></div>
     </div>
   );
 };

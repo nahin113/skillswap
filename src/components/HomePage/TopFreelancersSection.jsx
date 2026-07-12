@@ -20,7 +20,7 @@ export default function TopFreelancersSection() {
         // Slice the first 4 freelancers to fit the desktop scattered layout perfectly
         const start = allFreelancers.length-4 ;
         const end = allFreelancers.length ;
-        setTopFreelancers((allFreelancers || []).slice(8, 12));
+        setTopFreelancers((allFreelancers || []).slice(3, 7));
       } catch (err) {
         setError(err.message);
       } finally {
