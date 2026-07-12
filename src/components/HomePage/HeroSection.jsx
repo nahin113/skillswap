@@ -2,8 +2,10 @@
 import Link from "next/link";
 import { motion, useMotionValue, animate } from "framer-motion";
 import { useEffect, useRef, useState } from "react";
-import { ArrowRight, Play, Users, CheckCircle, BarChart3 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
+import Image from "next/image";
+import SplitText from "../SplitText";
 
 const HeroSection = () => {
   const [isClient, setIsClient] = useState(false);
@@ -78,10 +80,7 @@ const HeroSection = () => {
     },
   ];
 
-  // Duplicate for seamless scrolling
   const duplicatedImages = [...images, ...images, ...images];
-
-  // Scrolling animation
   const x = useMotionValue(0);
 
   const { data: session } = authClient.useSession();
@@ -90,23 +89,19 @@ const HeroSection = () => {
 
   useEffect(() => {
     setIsClient(true);
-
     const controls = animate(x, -1200, {
       ease: "linear",
       duration: 35,
       repeat: Infinity,
       repeatType: "loop",
     });
-
     return controls.stop;
   }, [x]);
 
-  // Don't render animation on server to prevent hydration mismatch
   if (!isClient) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-[#F4EFEA] to-[#E8E0D8] overflow-hidden">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-          {/* Static placeholder with same structure */}
           <div className="text-center max-w-4xl mx-auto mb-12">
             <div className="h-8 w-48 bg-gray-200/30 rounded-full mx-auto mb-4" />
             <div className="h-16 w-3/4 bg-gray-200/30 rounded-lg mx-auto mb-6" />
@@ -119,181 +114,203 @@ const HeroSection = () => {
   }
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-[#F4EFEA] to-[#E8E0D8] overflow-hidden">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-20">
-        {/* Header Content */}
-        <div className="text-center max-w-4xl mx-auto mb-12">
-          <motion.h1
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.1 }}
-            className="text-4xl sm:text-5xl lg:text-7xl font-bold text-[#1C1E1B] leading-tight"
-          >
-            Get your tasks done by <br className="hidden md:inline" />
-            <span className="text-[#4E654C]">skilled freelancers</span>
-          </motion.h1>
+    <div className="relative min-h-screen w-full flex flex-col justify-start items-center overflow-hidden -mt-[76px] pb-24">
+      {/* 1. MASTER IMMERSIVE BACKGROUND CANVAS */}
+      <div className="absolute inset-0 z-0">
+        <Image
+          src="/banner1.jpg"
+          alt="Premium campus housing interior"
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover object-center"
+        />
 
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            className="mt-6 text-lg sm:text-xl text-[#5A5E5A] max-w-2xl mx-auto"
-          >
-            The seamless, micro-task freelance marketplace engineered for swift,
-            verified collaborative workflows. Post a small task or browse open
-            gigs to start connecting instantly with global talent.
-          </motion.p>
+        {/* Modern dark mask overlays to protect text content readability */}
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-zinc-950/50 to-transparent" />
+        <div className="absolute inset-0 bg-radial-gradient from-transparent via-black/10 to-black/60" />
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.3 }}
-            className="mt-8 flex flex-wrap items-center justify-center gap-4"
-          >
-            {role === "client" ? (
-              <Link
-                href="/dashboard/client/postTasks"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1C1E1B] text-[#F4EFEA] font-medium rounded-full hover:bg-[#2A2D2A] transition-all hover:scale-105 shadow-lg"
-              >
-                Post a Task
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            ) : (
-              <Link
-                href="/tasks"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#1C1E1B] text-[#F4EFEA] font-medium rounded-full hover:bg-[#2A2D2A] transition-all hover:scale-105 shadow-lg"
-              >
-                Browse Tasks
-                <ArrowRight className="w-4 h-4" />
-              </Link>
-            )}
-          </motion.div>
-        </div>
+        {/* PREMIUM FEATHERED GRADIENT FLUID BOTTOM: Blends your image seamlessly into your layout base color (#F1EFEB) */}
+        <div className="absolute bottom-0 left-0 right-0 h-96 bg-gradient-to-t from-[#F1EFEB] via-[#F1EFEB]/70 to-transparent" />
+      </div>
 
-        {/* CURVED/WAVE IMAGE CAROUSEL */}
-        <div className="relative py-8">
-          {/* Gradient overlays for smooth edges */}
-          <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-[#F4EFEA] to-transparent z-10" />
-          <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-[#F4EFEA] to-transparent z-10" />
-
-          <motion.div
-            ref={containerRef}
-            style={{ x }}
-            className="flex gap-6 items-center cursor-grab active:cursor-grabbing"
-            whileHover={{ animationPlayState: "paused" }}
-            onMouseEnter={() => {
-              const controls = animate(x, x.get(), { duration: 0 });
-              controls.stop();
-            }}
-            onMouseLeave={() => {
-              const controls = animate(x, -1200, {
-                ease: "linear",
-                duration: 35,
-                repeat: Infinity,
-                repeatType: "loop",
-              });
-            }}
-          >
-            {duplicatedImages.map((image, index) => {
-              // Use pre-calculated values for wave pattern
-              const waveOffset = image.offset;
-              const rotation = image.rotation;
-
-              return (
-                <motion.div
-                  key={`${image.id}-${index}`}
-                  className={`relative flex-shrink-0 w-64 rounded-3xl overflow-hidden shadow-2xl group ${image.height}`}
-                  style={{
-                    transform: `translateY(${waveOffset}px) rotate(${rotation}deg)`,
-                    backgroundColor: "#F4EFEA",
-                  }}
-                  whileHover={{
-                    scale: 1.08,
-                    zIndex: 20,
-                    transition: { duration: 0.3 },
-                  }}
-                  onHoverStart={() => setHoveredIndex(index)}
-                  onHoverEnd={() => setHoveredIndex(null)}
-                >
-                  <img
-                    src={image.src}
-                    alt={image.title}
-                    className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
-                    loading="lazy"
-                  />
-
-                  {/* Overlay on hover */}
-                  <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{
-                      opacity: hoveredIndex === index ? 1 : 0,
-                      y: hoveredIndex === index ? 0 : 20,
-                    }}
-                    transition={{ duration: 0.3 }}
-                    className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent flex items-end p-6"
-                  >
-                    <div className="text-white">
-                      <p className="text-sm font-medium opacity-80">Featured</p>
-                      <h3 className="text-xl font-semibold">{image.title}</h3>
-                    </div>
-                  </motion.div>
-                </motion.div>
-              );
-            })}
-          </motion.div>
-        </div>
-
-        {/* Feature Cards */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.8, delay: 0.4 }}
-          className="mt-16 w-full max-w-6xl mx-auto px-4"
-        >
-          {/* MAIN OUTER CONTAINER: Matches the image layout exactly by grouping 
-        the features into a single continuous segmented track block 
-      */}
-          <div className="overflow-hidden grid grid-cols-1 md:grid-cols-3 md:divide-x divide-y md:divide-y-0 divide-[#b1a69c]">
-            {/* Card 1 */}
-            <div className="p-8 sm:p-10 flex flex-col items-start space-y-4 hover:bg-[#E6DDD4]/20 transition-colors duration-200">
-              <div className="text-center">
-                <h3 className="font-bold text-lg text-[#1C1E1B] mb-2 tracking-tight">
-                  Real-Time Collaboration
-                </h3>
-                <p className="text-sm text-[#5A5E5A] leading-relaxed">
-                  Communicate seamlessly and keep everyone in sync with built-in
-                  messaging, file sharing, and live updates.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 2 */}
-            <div className="p-8 sm:p-10 flex flex-col items-start space-y-4 hover:bg-[#E6DDD4]/20 transition-colors duration-200">
-              <div className="text-center">
-                <h3 className="font-bold text-lg text-[#1C1E1B] mb-2 tracking-tight">
-                  Task & Project Tracking
-                </h3>
-                <p className="text-sm text-[#5A5E5A] leading-relaxed">
-                  Assign tasks, set deadlines, and visualize progress with
-                  boards, lists, and timelines tailored to your team's style.
-                </p>
-              </div>
-            </div>
-
-            {/* Card 3 */}
-            <div className="p-8 sm:p-10 flex flex-col items-start space-y-4 hover:bg-[#E6DDD4]/20 transition-colors duration-200">
-              <div className="text-center">
-                <h3 className="font-bold text-lg text-[#1C1E1B] mb-2 tracking-tight">
-                  Performance Insights
-                </h3>
-                <p className="text-sm text-[#5A5E5A] leading-relaxed">
-                  Make smarter decisions with analytics that show productivity
-                  trends, bottlenecks, and team workload balance.
-                </p>
-              </div>
-            </div>
+      <div className="pt-30 space-y-30">
+        {/* 2. FLOATING DATA SHIFT BADGES */}
+        <div className="absolute inset-0 max-w-7xl mx-auto pointer-events-none hidden md:block z-10">
+          <div className="absolute top-[26%] left-[10%] bg-white/5 border border-white/10 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-emerald-400 flex items-center gap-2 shadow-lg">
+            <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />{" "}
+            Verified Talent
           </div>
-        </motion.div>
+          <div className="absolute top-[34%] right-[12%] bg-white/5 border border-white/10 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-amber-400 flex items-center gap-2 shadow-lg">
+            <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse" />{" "}
+            Swift Workflows
+          </div>
+          <div className="absolute bottom-[48%] left-[6%] bg-white/5 border border-white/10 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-sky-400 flex items-center gap-2 shadow-lg">
+            <span className="w-1.5 h-1.5 rounded-full bg-sky-400 animate-pulse" />{" "}
+            Micro-Tasks
+          </div>
+          <div className="absolute bottom-[50%] right-[6%] bg-white/5 border border-white/10 backdrop-blur-md px-3 py-1.5 rounded-full text-xs font-semibold text-purple-400 flex items-center gap-2 shadow-lg">
+            <span className="w-1.5 h-1.5 rounded-full bg-purple-400 animate-pulse" />{" "}
+            Secure Escrow
+          </div>
+        </div>
+
+        {/* 3. STRUCTURAL WRAPPER CONTAINER */}
+        <div className="relative z-10 w-full container mx-auto px-4 sm:px-6 lg:px-8 pt-36 flex flex-col items-center">
+          {/* Typography Block: Changed text colors to highly visible white/emerald variants */}
+          <div className="text-center max-w-4xl mx-auto mb-16">
+            <motion.h1
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.1 }}
+              className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.15]"
+            >
+              <SplitText
+                text="Get your tasks done by"
+                className="text-4xl sm:text-5xl lg:text-7xl font-extrabold text-white tracking-tight leading-[1.15]"
+                delay={50}
+                duration={1.25}
+                ease="power3.out"
+                splitType="chars"
+                from={{ opacity: 0, y: 40 }}
+                to={{ opacity: 1, y: 0 }}
+                threshold={0.1}
+                rootMargin="-100px"
+                textAlign="center"
+                showCallback
+              />
+              <br className="hidden md:inline" />
+              <span>
+                <SplitText
+                  text="skilled freelancers"
+                  className="text-[#108A00]"
+                  delay={50}
+                  duration={1.25}
+                  ease="power3.out"
+                  splitType="chars"
+                  from={{ opacity: 0, y: 40 }}
+                  to={{ opacity: 1, y: 0 }}
+                  threshold={0.1}
+                  rootMargin="-100px"
+                  textAlign="center"
+                  showCallback
+                />
+              </span>
+            </motion.h1>
+
+            <motion.p
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.2 }}
+              className="mt-6 text-base sm:text-lg text-zinc-300 max-w-2xl mx-auto font-medium drop-shadow-sm"
+            >
+              The seamless, micro-task freelance marketplace engineered for
+              swift, verified collaborative workflows. Post a small task or
+              browse open gigs to start connecting instantly with global talent.
+            </motion.p>
+
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.6, delay: 0.3 }}
+              className="mt-8 flex flex-wrap items-center justify-center gap-4"
+            >
+              {role === "client" ? (
+                <Link
+                  href="/dashboard/client/postTasks"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#108A00] text-white font-bold rounded-full hover:bg-[#14A800] transition-all hover:scale-105 shadow-xl shadow-green-950/20"
+                >
+                  Post a Task
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </Link>
+              ) : (
+                <Link
+                  href="/tasks"
+                  className="inline-flex items-center gap-2 px-7 py-3.5 bg-[#108A00] text-white font-bold rounded-full hover:bg-[#14A800] transition-all hover:scale-105 shadow-xl shadow-green-950/20"
+                >
+                  Browse Tasks
+                  <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                </Link>
+              )}
+            </motion.div>
+          </div>
+
+          {/* 4. SEAMLESS INFINITE TRACK ROW CAROUSEL */}
+          <div className="relative w-full py-12 my-8 overflow-hidden">
+            {/* Fading left & right horizontal edge covers */}
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-transparent to-transparent z-10 pointer-events-none" />
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-transparent to-transparent z-10 pointer-events-none" />
+
+            <motion.div
+              ref={containerRef}
+              style={{ x }}
+              className="flex gap-6 items-center cursor-grab active:cursor-grabbing"
+              whileHover={{ animationPlayState: "paused" }}
+              onMouseEnter={() => {
+                const controls = animate(x, x.get(), { duration: 0 });
+                controls.stop();
+              }}
+              onMouseLeave={() => {
+                animate(x, -1200, {
+                  ease: "linear",
+                  duration: 35,
+                  repeat: Infinity,
+                  repeatType: "loop",
+                });
+              }}
+            >
+              {duplicatedImages.map((image, index) => {
+                const waveOffset = image.offset;
+                const rotation = image.rotation;
+
+                return (
+                  <motion.div
+                    key={`${image.id}-${index}`}
+                    className={`relative flex-shrink-0 w-64 rounded-3xl overflow-hidden shadow-2xl group ${image.height}`}
+                    style={{
+                      transform: `translateY(${waveOffset}px) rotate(${rotation}deg)`,
+                      backgroundColor: "#F4EFEA",
+                    }}
+                    whileHover={{
+                      scale: 1.08,
+                      zIndex: 20,
+                      transition: { duration: 0.3 },
+                    }}
+                    onHoverStart={() => setHoveredIndex(index)}
+                    onHoverEnd={() => setHoveredIndex(null)}
+                  >
+                    <img
+                      src={image.src}
+                      alt={image.title}
+                      className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                      loading="lazy"
+                    />
+
+                    {/* Glassmorphic floating meta overlay card */}
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{
+                        opacity: hoveredIndex === index ? 1 : 0,
+                        y: hoveredIndex === index ? 0 : 20,
+                      }}
+                      transition={{ duration: 0.3 }}
+                      className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent flex items-end p-6"
+                    >
+                      <div className="text-white">
+                        <p className="text-sm font-medium opacity-80">
+                          Featured
+                        </p>
+                        <h3 className="text-xl font-semibold">{image.title}</h3>
+                      </div>
+                    </motion.div>
+                  </motion.div>
+                );
+              })}
+            </motion.div>
+          </div>
+        </div>
+      </div>
+      <div>
       </div>
     </div>
   );

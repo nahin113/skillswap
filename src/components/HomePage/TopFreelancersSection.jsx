@@ -71,7 +71,7 @@ export default function TopFreelancersSection() {
         {/* Centered Section Header */}
         <div className="flex flex-col items-center justify-center text-center mb-16 lg:mb-20 space-y-5">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black text-[#1C1E1B] tracking-tight">
-            Work with <span className="text-[#4E654C]">Top Talent</span>
+            Work with <span className="text-[#108A00]">Top Talent</span>
           </h2>
           <p className="text-base sm:text-lg text-[#5A5E5A] max-w-2xl leading-relaxed font-medium">
             Connect with highly rated professionals who consistently deliver
@@ -188,7 +188,7 @@ export default function TopFreelancersSection() {
                 {/* Action Button */}
                 <Link
                   href={`/browseFreelancers/${freelancerId}`}
-                  className="w-full inline-flex justify-center items-center py-3.5 bg-[#1C1E1B] text-[#F4EFEA] hover:bg-[#4E654C] text-xs font-bold uppercase tracking-wider rounded-full transition-colors duration-200 shadow-sm"
+                  className="w-full inline-flex justify-center items-center py-3.5 bg-[#1C1E1B] text-[#F4EFEA] hover:bg-[#108A00] text-xs font-bold uppercase tracking-wider rounded-full transition-colors duration-200 shadow-sm"
                 >
                   View Profile
                 </Link>

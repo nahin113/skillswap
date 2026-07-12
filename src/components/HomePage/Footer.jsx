@@ -90,10 +90,10 @@ export default function Footer() {
                   Corporate Hotline
                 </span>
                 <a
-                  href="tel:+18005550199"
+                  href="tel:+8801714333624"
                   className="text-sm text-[#1C1E1B] font-medium hover:text-[#4E654C] transition-colors"
                 >
-                  (+88) 01714333624 
+                  (+880) 1714333624 
                 </a>
               </li>
             </ul>

@@ -73,7 +73,7 @@ export default function Testimonials() {
         {/* CENTERED HEADER BLOCK */}
         <div className="text-center max-w-2xl mb-16 space-y-3">
           <h2 className="text-3xl sm:text-4xl font-black text-[#1C1E1B] tracking-tight">
-            What People Say <span className="text-[#4E654C]">About Us</span>
+            What People Say <span className="text-[#108A00]">About Us</span>
           </h2>
           <p className="text-sm sm:text-base text-[#5A5E5A]">
             Click on any member of our global network below to read their
@@ -103,7 +103,7 @@ export default function Testimonials() {
                   person.size
                 } ${person.offset} ${
                   isActive
-                    ? "ring-4 ring-[#4E654C] ring-offset-4 ring-offset-[#F4EFEA] scale-105 z-20 shadow-md"
+                    ? "ring-4 ring-[#108A00] ring-offset-4 ring-offset-[#F4EFEA] scale-105 z-20 shadow-md"
                     : "opacity-60 hover:opacity-100 grayscale hover:grayscale-0 z-10"
                 }`}
               >
@@ -119,7 +119,7 @@ export default function Testimonials() {
           })}
 
           {/* Static Clean Empty Hub Asset to match "View More" element in image */}
-          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-dashed border-[#4E654C]/40 flex items-center justify-center bg-white/30 text-center lg:-mt-14 shrink-0">
+          <div className="w-16 h-16 md:w-20 md:h-20 rounded-full border-2 border-dashed border-[#108A00]/40 flex items-center justify-center bg-white/30 text-center lg:-mt-14 shrink-0">
             <span className="text-[10px] md:text-xs font-bold text-[#4E654C]">
               Join Us
             </span>

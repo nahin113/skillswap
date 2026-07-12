@@ -16,6 +16,7 @@ import Link from "next/link";
 import Image from "next/image";
 import { useEffect, useState } from "react";
 import { getAllTasks } from "@/lib/api/tasks";
+import TopSkillsSection from "./TopSkillsSection";
 
 const LatestTasksSection = () => {
   const [leftTasks, setLeftTasks] = useState([]);
@@ -173,9 +174,6 @@ const LatestTasksSection = () => {
           viewport={{ once: true }}
           className="text-center max-w-3xl mx-auto mb-8 sm:mb-12"
         >
-          <span className="inline-block text-xs sm:text-sm font-bold uppercase tracking-wider text-[#4E654C] bg-white px-3 sm:px-4 py-1 sm:py-1.5 rounded-full mb-2 sm:mb-3 shadow-sm border border-[#E6DDD4]/40">
-            Latest Opportunities
-          </span>
           <h2 className="text-2xl sm:text-3xl lg:text-4xl font-black text-[#1C1E1B] mb-2 sm:mb-3 tracking-tight">
             Featured Tasks
           </h2>
@@ -183,6 +181,8 @@ const LatestTasksSection = () => {
             Discover the latest open tasks from your database collection
           </p>
         </motion.div>
+
+        <TopSkillsSection/>
 
         {/* Mobile Layout (< 768px) */}
         <div className="block lg:hidden space-y-4 mb-8">
@@ -320,7 +320,7 @@ const LatestTasksSection = () => {
         >
           <Link
             href="/tasks"
-            className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#1C1E1B] text-[#F4EFEA] text-sm font-bold uppercase tracking-wider rounded-full hover:bg-zinc-800 transition-all hover:scale-105 shadow-sm"
+            className="inline-flex items-center gap-2 px-6 sm:px-8 py-2.5 sm:py-3 bg-[#1C1E1B] text-[#F4EFEA] text-sm font-bold uppercase tracking-wider rounded-full hover:bg-[#108A00] transition-all hover:scale-105 shadow-sm"
           >
             View All Tasks
             <ArrowRight className="w-3.5 h-3.5" />

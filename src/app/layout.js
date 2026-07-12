@@ -3,6 +3,7 @@ import "./globals.css";
 import Navbar from "@/components/HomePage/Navbar";
 import Footer from "@/components/HomePage/Footer";
 import { ToastContainer, toast } from "react-toastify";
+import { ScrollReveal } from "@/components/ScrollReveal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -42,7 +43,9 @@ export default function RootLayout({ children }) {
           />
           {children}
         </main>
-        <Footer />
+        <ScrollReveal direction="up" delay={0.2}>
+          <Footer />
+        </ScrollReveal>
       </body>
     </html>
   );
