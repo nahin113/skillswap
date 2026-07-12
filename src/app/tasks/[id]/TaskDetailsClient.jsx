@@ -28,7 +28,6 @@ export default function TaskDetailsClient({ task }) {
     setLoading(true);
     setMessage({ type: "", text: "" });
 
-    // 🚀 USING OBJECT.FROMENTRIES FOR FORM CAPTURE
     const formData = new FormData(e.currentTarget);
     const formValues = Object.fromEntries(formData.entries());
 
