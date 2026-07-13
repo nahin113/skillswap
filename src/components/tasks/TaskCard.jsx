@@ -109,7 +109,7 @@ export default function TaskCard({ task }) {
 
       {/* --- Smooth Animated Reveal Action Link Area --- */}
       <div className="h-12 relative mt-4 flex items-center">
-        <div className="absolute inset-x-0 bottom-0 opacity-0 translate-y-3 pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.25,1,0.35,1)]">
+        <div className="absolute inset-x-0 bottom-0 xl:opacity-0 translate-y-3 xl:pointer-events-none group-hover:opacity-100 group-hover:translate-y-0 group-hover:pointer-events-auto transition-all duration-300 ease-[cubic-bezier(0.25,1,0.35,1)]">
           <Link
             href={`/tasks/${taskId}`}
             className="w-full sm:w-fit inline-flex items-center justify-center gap-2 bg-[#14A800] hover:bg-[#118F00] text-white px-6 py-2.5 rounded-full text-xs font-bold uppercase tracking-wider transition-all duration-200 shadow-sm"

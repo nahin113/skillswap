@@ -19,7 +19,6 @@ import { authClient } from "@/lib/auth-client";
 import { Input } from "@heroui/react";
 import { toast } from "react-toastify";
 
-// Sample skillset bank for matching suggestions
 const SUGGESTED_SKILLS = [
   "React",
   "Next.js",
